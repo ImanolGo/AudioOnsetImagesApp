@@ -39,6 +39,9 @@ class ResourceManager: public Manager
 
         //! Searches for the specified SVG name and returns the first found.
         ofPtr<ofxSVG> getSVG(const string& name);
+    
+        //! Add new texture externally
+        bool  addTexture(string name, string path);
 
 	private:
 

@@ -11,7 +11,7 @@ int main( ){
     
     shared_ptr<ofAppBaseWindow> mainWindow = ofCreateWindow(windowSettings[0]);
     
-    //settings.shareContextWith = mainWindow;
+    windowSettings[1].shareContextWith = mainWindow;
     shared_ptr<ofAppBaseWindow> secondWindow = ofCreateWindow(windowSettings[1]);
     //secondWindow->setVerticalSync(false);
     

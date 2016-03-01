@@ -35,4 +35,5 @@ void AudioOnsetImagesApp::exit()
 
 void AudioOnsetImagesApp::drawScreen2(ofEventArgs & args){
     ofBackground(255, 0, 0);
+    AppManager::getInstance().getImageManager().draw();
 }

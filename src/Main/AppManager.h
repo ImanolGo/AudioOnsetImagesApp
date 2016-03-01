@@ -18,6 +18,7 @@
 #include "VisualEffectsManager.h"
 #include "ViewManager.h"
 #include "ImageManager.h"
+#include "KeyboardManager.h"
 
 
 //========================== class AppManager ==============================
@@ -100,6 +101,8 @@ private:
 
     SettingsManager          m_settingsManager;          ///< Manages the application's settings
     ResourceManager          m_resourceManager;          ///< Manages the application's resources
+    
+    KeyboardManager          m_keyboardManager;          ///< Manages the application's keyboard
     GuiManager               m_guiManager;               ///< Manages the application's settings
     ViewManager              m_viewManager;              ///< Manages the visuals
     VisualEffectsManager     m_visualEffectsManager;     ///< Manages the visual effects

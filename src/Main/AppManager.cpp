@@ -63,6 +63,7 @@ void AppManager::setupManagers()
 {
     m_settingsManager.setup();
     m_resourceManager.setup();
+    m_keyboardManager.setup();
     m_viewManager.setup();
     m_visualEffectsManager.setup();
     m_imageManager.setup();

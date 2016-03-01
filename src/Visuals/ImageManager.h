@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Manager.h"
+#include "ImageVisual.h"
 
 
 //========================== class ImageManager ==============================
@@ -39,12 +40,22 @@ class ImageManager: public Manager
 
         //! Draw the Image Manager
         void draw();
+    
+        void loadCurrentImage();
 
     private:
 
         void loadImages();
+    
+        string getImageName(const string& path);
 
 
     private:
+    
+        typedef                 vector<string>          ImageNameVector;       ///< defines a vector of images names
+    
+        ImageNameVector         m_imageNames;       ///< image names sorted by name
+    
+        ImageVisual             m_currentImage;  ///< current image to be displayed
 
 };
