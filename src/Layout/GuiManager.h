@@ -23,9 +23,12 @@ class GuiManager: public Manager
 {
     static const string GUI_SETTINGS_FILE_NAME;
     static const string GUI_SETTINGS_NAME;
-    static const int GUI_WIDTH;
+    
     
 public:
+    
+    static const int GUI_WIDTH;
+    static const int MARGIN;
 
     //! Constructor
     GuiManager();
@@ -74,6 +77,8 @@ private:
     ofParameterGroup    m_parametersImage;
     ofParameterGroup    m_parametersAudio;
     
+    
+    ofParameter<float>    m_fadeTime;
     
     ofParameter<float>    m_audioLevel;
     

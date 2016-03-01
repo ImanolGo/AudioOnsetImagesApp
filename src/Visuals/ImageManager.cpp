@@ -13,9 +13,12 @@
 
 #include "ImageManager.h"
 #include "AppManager.h"
+#include "WindowSettingsManager.h"
 
 
-ImageManager::ImageManager(): Manager()
+
+
+ImageManager::ImageManager(): Manager(), m_currentIndex(0), m_fadeTime(2.0)
 {
 	//Intentionally left empty
 }
@@ -35,8 +38,10 @@ void ImageManager::setup()
 
 	Manager::setup();
 
+    m_currentImage =  ofPtr<ImageVisual>(new ImageVisual());
+    
     this->loadImages();
-    this->loadCurrentImage();
+    this->loadNextImage();
     ofLogNotice() <<"ImageManager::initialized" ;
 
 }
@@ -69,29 +74,63 @@ void ImageManager::loadImages()
 }
 
 
-void ImageManager::loadCurrentImage()
+void ImageManager::nextImage()
 {
     if(m_imageNames.empty()){
         return;
     }
     
-    int index = ofRandom(m_imageNames.size());
-    float width = 1920;
-    float height = 1200;
+    this->nextImageIndex();
+    this->loadNextImage();
+    this->setAnimations();
     
-    m_currentImage.setResource(m_imageNames[index]);
-    m_currentImage.setPosition(ofPoint(width*0.5,height*0.5));
-    m_currentImage.setCentred(true);
+}
+
+void ImageManager::nextImageIndex()
+{
+    if(m_indexes.empty()){
+        for(int i = 0; i < m_imageNames.size(); i++){
+            m_indexes.push_back(i);
+        }
+    }
+    
+    int n = (int) ceil( ofRandom(m_indexes.size()-1));
     
     
-    ofLogNotice()<< "ImageManager::loadImages-> Loading current image : " <<m_imageNames[index];
-    if(m_currentImage.getOriginalWidth() > m_currentImage.getOriginalHeight()){
-        m_currentImage.setWidth(width,true);
+    m_currentIndex = m_indexes[n];
+    m_indexes.erase(m_indexes.begin() + n);
+    
+    //ofLogNotice()<< "ImageManager::nextImageIndex-> current index : " << m_currentIndex;
+}
+
+
+void ImageManager::loadNextImage()
+{
+    
+    WindowSettingsManager::WindowSettingsVector windowSettings = WindowSettingsManager::getInstance().getWindowsSettings();
+    
+    float width = windowSettings[1].width;
+    float height = windowSettings[1].height;
+    
+    
+    m_currentImage->setResource(m_imageNames[m_currentIndex]);
+    m_currentImage->setPosition(ofPoint(width*0.5,height*0.5));
+    m_currentImage->setCentred(true);
+    
+    
+    ofLogNotice()<< "ImageManager::loadNextImage-> Loading current image : " <<m_imageNames[m_currentIndex];
+    if(m_currentImage->getOriginalWidth() > m_currentImage->getOriginalHeight()){
+        m_currentImage->setWidth(width,true);
     }
     else{
-        m_currentImage.setWidth(height,true);
+        m_currentImage->setWidth(height,true);
     }
-    
+}
+
+void ImageManager::setAnimations()
+{
+    AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_currentImage);
+    AppManager::getInstance().getVisualEffectsManager().createFadeEffect(m_currentImage, 255.0, 0.0, 0.0, m_fadeTime);
 }
 
 string ImageManager::getImageName(const string& path)
@@ -109,5 +148,14 @@ void ImageManager::update()
 void ImageManager::draw()
 {
     ofClear(0);
-    m_currentImage.draw();
+    if(m_currentImage){
+        m_currentImage->draw();
+    }
+    
+}
+
+
+void ImageManager::onChangeFadeTime(float& value)
+{
+    m_fadeTime = value;
 }

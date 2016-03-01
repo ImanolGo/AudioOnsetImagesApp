@@ -11,6 +11,7 @@
 		08028E778DF4FE57FB1EB693 /* WindowSettingsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1409637B4EAC9BC1E8D9AE71 /* WindowSettingsManager.cpp */; };
 		0818FDB51C85F5F100436C77 /* SettingsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0818FDB31C85F5F100436C77 /* SettingsManager.cpp */; };
 		0818FDB81C86042900436C77 /* KeyboardManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0818FDB61C86042900436C77 /* KeyboardManager.cpp */; };
+		0818FDBC1C86131900436C77 /* PreviewManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0818FDBA1C86131900436C77 /* PreviewManager.cpp */; };
 		10071661D0AA59C4EC246B6C /* ofxGuiGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4A1CE60B1AC164DA8880771 /* ofxGuiGroup.cpp */; };
 		1AF15FCF93D2DDD6D4285C8E /* AppManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5056FC61E30B9810903B814D /* AppManager.cpp */; };
 		1E777E277DAB367779E7E89A /* ofxButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73B831DDAB58EC89B0D0BDEA /* ofxButton.cpp */; };
@@ -89,6 +90,8 @@
 		0818FDB41C85F5F100436C77 /* SettingsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingsManager.h; path = Engine/Resources/SettingsManager.h; sourceTree = "<group>"; };
 		0818FDB61C86042900436C77 /* KeyboardManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = KeyboardManager.cpp; path = Layout/KeyboardManager.cpp; sourceTree = "<group>"; };
 		0818FDB71C86042900436C77 /* KeyboardManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KeyboardManager.h; path = Layout/KeyboardManager.h; sourceTree = "<group>"; };
+		0818FDBA1C86131900436C77 /* PreviewManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PreviewManager.cpp; path = Layout/PreviewManager.cpp; sourceTree = "<group>"; };
+		0818FDBB1C86131900436C77 /* PreviewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PreviewManager.h; path = Layout/PreviewManager.h; sourceTree = "<group>"; };
 		08C5194B0C92DDA2A7539395 /* core.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = core.h; path = src/Addons/ofxUnicode/libs/utf8cpp/src/utf8_v2_3_1/source/utf8/core.h; sourceTree = SOURCE_ROOT; };
 		09F8F2DF1D53E65319F30B96 /* LightManager.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = LightManager.cpp; path = src/Engine/3D/LightManager.cpp; sourceTree = SOURCE_ROOT; };
 		0ACA94EAF2C7DCA9EE906D69 /* svgtiny_internal.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = svgtiny_internal.h; path = src/Addons/ofxSvg/libs/svgTiny/src/svgtiny_internal.h; sourceTree = SOURCE_ROOT; };
@@ -241,6 +244,8 @@
 		375D8B140B52B55EB32EB487 /* Layout */ = {
 			isa = PBXGroup;
 			children = (
+				0818FDBA1C86131900436C77 /* PreviewManager.cpp */,
+				0818FDBB1C86131900436C77 /* PreviewManager.h */,
 				0818FDB61C86042900436C77 /* KeyboardManager.cpp */,
 				0818FDB71C86042900436C77 /* KeyboardManager.h */,
 				4907E8B0250B798D3E6F09A1 /* GuiManager.cpp */,
@@ -647,6 +652,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0818FDBC1C86131900436C77 /* PreviewManager.cpp in Sources */,
 				9A15495FA2EE8F23378413B2 /* ofxBaseGui.cpp in Sources */,
 				1E777E277DAB367779E7E89A /* ofxButton.cpp in Sources */,
 				10071661D0AA59C4EC246B6C /* ofxGuiGroup.cpp in Sources */,

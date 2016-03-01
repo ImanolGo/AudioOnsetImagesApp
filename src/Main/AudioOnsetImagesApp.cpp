@@ -35,5 +35,13 @@ void AudioOnsetImagesApp::exit()
 
 void AudioOnsetImagesApp::drawScreen2(ofEventArgs & args){
     ofBackground(255, 0, 0);
-    AppManager::getInstance().getImageManager().draw();
+    
+    int wIndex = 0;
+    AppManager::getInstance().getPreviewManager().begin(wIndex);
+        AppManager::getInstance().getImageManager().draw();
+    AppManager::getInstance().getPreviewManager().end(wIndex);
+    
+    AppManager::getInstance().getPreviewManager().draw(wIndex);
+    
+    //AppManager::getInstance().getImageManager().draw();
 }

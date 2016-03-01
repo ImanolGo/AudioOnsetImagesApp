@@ -11,6 +11,7 @@
 
 #include "Manager.h"
 #include "ImageVisual.h"
+#include "WindowSettingsManager.h"
 
 
 //========================== class ImageManager ==============================
@@ -41,21 +42,35 @@ class ImageManager: public Manager
         //! Draw the Image Manager
         void draw();
     
-        void loadCurrentImage();
+        void nextImage();
+    
+        void onChangeFadeTime(float& value);
+    
 
     private:
 
         void loadImages();
     
         string getImageName(const string& path);
+    
+        void setAnimations();
+    
+        void loadNextImage();
+    
+        void nextImageIndex();
 
 
     private:
     
         typedef                 vector<string>          ImageNameVector;       ///< defines a vector of images names
+        typedef                 vector<int>             IndexVector;       ///< defines a vector of indexes
     
         ImageNameVector         m_imageNames;       ///< image names sorted by name
+        IndexVector             m_indexes;          ///< current available indexes
     
-        ImageVisual             m_currentImage;  ///< current image to be displayed
+        int                     m_currentIndex;     ///< current image index
+        float                   m_fadeTime;         ///< fade time for the animations
+    
+        ofPtr<ImageVisual>      m_currentImage;  ///< current image to be displayed
 
 };

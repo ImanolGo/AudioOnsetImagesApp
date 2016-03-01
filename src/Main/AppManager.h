@@ -19,6 +19,7 @@
 #include "ViewManager.h"
 #include "ImageManager.h"
 #include "KeyboardManager.h"
+#include "PreviewManager.h"
 
 
 //========================== class AppManager ==============================
@@ -67,6 +68,9 @@ public:
     //! Returns the Image manager
     ImageManager&   getImageManager() { return m_imageManager; }
     
+    //! Returns the Preview Manager
+    PreviewManager&  getPreviewManager() { return m_previewManager; }
+    
 
     //==========================================================================
 
@@ -107,6 +111,7 @@ private:
     ViewManager              m_viewManager;              ///< Manages the visuals
     VisualEffectsManager     m_visualEffectsManager;     ///< Manages the visual effects
     ImageManager             m_imageManager;             ///< Manages the images to be exported
+    PreviewManager           m_previewManager;           ///< Manages the preview
 
     bool                     m_debugMode;
 };

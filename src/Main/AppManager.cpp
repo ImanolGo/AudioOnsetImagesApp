@@ -66,9 +66,11 @@ void AppManager::setupManagers()
     m_keyboardManager.setup();
     m_viewManager.setup();
     m_visualEffectsManager.setup();
-    m_imageManager.setup();
-    
     m_guiManager.setup();
+    m_imageManager.setup();
+    m_previewManager.setup();
+   
+    
     
 }
 
@@ -87,10 +89,10 @@ void AppManager::draw()
     
     ofClear(0);
     
-    
-    //m_viewManager.draw();
+    m_viewManager.draw();
     
     m_guiManager.draw();
+    m_previewManager.draw();
     
 }
 
