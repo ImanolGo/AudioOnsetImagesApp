@@ -6,24 +6,24 @@
  *
  */
 
-//#include "AppManager.h"
+#include "AppManager.h"
 
 #include "AudioOnsetImagesApp.h"
 
 //--------------------------------------------------------------
 void AudioOnsetImagesApp::setup(){
-    //AppManager::getInstance().setup();
+    AppManager::getInstance().setup();
 }
 
 //--------------------------------------------------------------
 void AudioOnsetImagesApp::update(){
-    //AppManager::getInstance().update();
+    AppManager::getInstance().update();
 }
 
 //--------------------------------------------------------------
 void AudioOnsetImagesApp::draw(){
     ofBackground(0);
-    //AppManager::getInstance().draw();
+    AppManager::getInstance().draw();
 }
 
 void AudioOnsetImagesApp::exit()
