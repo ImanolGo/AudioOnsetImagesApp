@@ -78,9 +78,13 @@ void GuiManager::setupImageGui()
 
 void GuiManager::setupAudioGui()
 {
-    //auto audioManager = &AppManager::getInstance().getAudioVisualsManager();
+    auto audioManager = &AppManager::getInstance().getAudioManager();
 
     m_parametersAudio.setName("Audio");
+    
+    m_threshold.set("Threshold", 2.0, 0.5, 5.0);
+    m_threshold.addListener(audioManager, &AudioManager::onChangeThreshold);
+    m_parametersAudio.add(m_threshold);
 
     m_gui.add(m_parametersAudio);
 }

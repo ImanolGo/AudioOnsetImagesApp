@@ -20,6 +20,7 @@
 #include "ImageManager.h"
 #include "KeyboardManager.h"
 #include "PreviewManager.h"
+#include "AudioManager.h"
 
 
 //========================== class AppManager ==============================
@@ -71,6 +72,9 @@ public:
     //! Returns the Preview Manager
     PreviewManager&  getPreviewManager() { return m_previewManager; }
     
+    //! Returns the Audio Manager
+    AudioManager&  getAudioManager() { return m_audioManager; }
+    
 
     //==========================================================================
 
@@ -112,6 +116,7 @@ private:
     VisualEffectsManager     m_visualEffectsManager;     ///< Manages the visual effects
     ImageManager             m_imageManager;             ///< Manages the images to be exported
     PreviewManager           m_previewManager;           ///< Manages the preview
+    AudioManager             m_audioManager;             ///< Manages the audio
 
     bool                     m_debugMode;
 };

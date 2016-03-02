@@ -12,6 +12,10 @@
 
 //--------------------------------------------------------------
 void AudioOnsetImagesApp::setup(){
+    
+    // Output->0 Input->mono  sampleRate->44100  bufSize->1024
+    ofSoundStreamSetup(0, 1, this, 44100, 1024, 4);
+    
     AppManager::getInstance().setup();
 }
 
@@ -45,3 +49,8 @@ void AudioOnsetImagesApp::drawScreen2(ofEventArgs & args){
     
     //AppManager::getInstance().getImageManager().draw();
 }
+
+void AudioOnsetImagesApp::audioReceived(float* input, int bufferSize, int nChannels) {
+    AppManager::getInstance().getAudioManager().audioReceived(input, bufferSize);
+}
+

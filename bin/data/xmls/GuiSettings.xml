@@ -1,9 +1,11 @@
 <GUI>
-	<FPS>60.0034</FPS>
+	<FPS>60.017</FPS>
 	<Images>
-		<Fade_Time>1.25452</Fade_Time>
+		<Fade_Time>4.37172</Fade_Time>
 	</Images>
-	<Audio/>
+	<Audio>
+		<Threshold>1.96939</Threshold>
+	</Audio>
 <GUI/>
 <group/>
 </GUI>

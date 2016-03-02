@@ -80,7 +80,7 @@ private:
     
     ofParameter<float>    m_fadeTime;
     
-    ofParameter<float>    m_audioLevel;
+    ofParameter<float>    m_threshold;
     
    
     bool        m_showGui;  //It defines the whether the gui should be shown or not
