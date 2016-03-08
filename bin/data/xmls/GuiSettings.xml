@@ -1,10 +1,16 @@
 <GUI>
-	<FPS>60.017</FPS>
+	<FPS>320.246</FPS>
 	<Images>
 		<Fade_Time>4.37172</Fade_Time>
+	<Random_Images>0</Random_Images>
+	<Fade_Time_Min>0.1</Fade_Time_Min>
+		<Fade_Time_Max>5</Fade_Time_Max>
+		<Random_Fade_Time>0</Random_Fade_Time>
 	</Images>
 	<Audio>
-		<Threshold>1.96939</Threshold>
+		<Threshold>1.61516</Threshold>
+	<Decay_Time>1.56665</Decay_Time>
+	<Decay_Rate>0.154315</Decay_Rate>
 	</Audio>
 <GUI/>
 <group/>

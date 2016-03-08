@@ -79,8 +79,13 @@ private:
     
     
     ofParameter<float>    m_fadeTime;
+    ofParameter<float>    m_fadeTimeMin;
+    ofParameter<float>    m_fadeTimeMax;
+    ofParameter<bool>     m_randomImages;
+    ofParameter<bool>     m_randomFadeTime;
     
     ofParameter<float>    m_threshold;
+    ofParameter<float>    m_decayTime;
     
    
     bool        m_showGui;  //It defines the whether the gui should be shown or not

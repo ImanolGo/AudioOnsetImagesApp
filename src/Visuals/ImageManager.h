@@ -46,6 +46,14 @@ class ImageManager: public Manager
     
         void onChangeFadeTime(float& value);
     
+        void onChangeMinFadeTime(float& value);
+    
+        void onChangeMaxFadeTime(float& value);
+    
+        void onChangeRandomImages(bool& value);
+    
+        void onChangeRandomFade(bool& value);
+    
 
     private:
 
@@ -53,11 +61,17 @@ class ImageManager: public Manager
     
         string getImageName(const string& path);
     
+        float getFadeTime() const;
+    
         void setAnimations();
     
         void loadNextImage();
     
         void nextImageIndex();
+    
+        void nextRandomImageIndex();
+    
+        void nextOrderedImageIndex();
 
 
     private:
@@ -70,6 +84,10 @@ class ImageManager: public Manager
     
         int                     m_currentIndex;     ///< current image index
         float                   m_fadeTime;         ///< fade time for the animations
+        float                   m_fadeTimeMin;      ///< minimum fade time of random selection
+        float                   m_fadeTimeMax;      ///< maximum fade time of random selection
+        bool                    m_random;           ///< defines wether the images are selected randomly or in order
+        bool                    m_randomFade;       ///< defines wether the images fade time are random or not
     
         ofPtr<ImageVisual>      m_currentImage;  ///< current image to be displayed
 

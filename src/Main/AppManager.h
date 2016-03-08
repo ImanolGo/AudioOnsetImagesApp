@@ -21,6 +21,7 @@
 #include "KeyboardManager.h"
 #include "PreviewManager.h"
 #include "AudioManager.h"
+#include "MidiManager.h"
 
 
 //========================== class AppManager ==============================
@@ -75,6 +76,9 @@ public:
     //! Returns the Audio Manager
     AudioManager&  getAudioManager() { return m_audioManager; }
     
+    //! Returns the MIDI Manager
+    MidiManager&  getMidiManager() { return m_midiManager; }
+    
 
     //==========================================================================
 
@@ -117,6 +121,7 @@ private:
     ImageManager             m_imageManager;             ///< Manages the images to be exported
     PreviewManager           m_previewManager;           ///< Manages the preview
     AudioManager             m_audioManager;             ///< Manages the audio
+    MidiManager              m_midiManager;              ///< Manages the MIDI
 
     bool                     m_debugMode;
 };

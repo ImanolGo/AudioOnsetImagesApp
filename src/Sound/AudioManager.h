@@ -13,7 +13,10 @@
 
 #include "ofxBeatTracking.h"
 #include "TextVisual.h"
+
 #include "RectangleVisual.h"
+#include "BasicVisual.h"
+
 
 //========================== class AudioManager ==============================
 //============================================================================
@@ -49,6 +52,8 @@ public:
     
     void onChangeThreshold(float& value);
     
+    void onChangeDecayTime(float& value);
+    
     void audioReceived(float* input, int bufferSize);
 
 
@@ -59,6 +64,8 @@ private:
     void setupText();
 
     void drawFFT();
+    
+    void setAnimations();
 
 private:
 
@@ -67,9 +74,12 @@ private:
     float           m_audioMax;
     float           m_threshold;
     float           m_minimumThreshold;
+    float           m_maxThreshold;
     float           m_decayRate;
+    float           m_decayTime;
     
     ofPtr<RectangleVisual>  m_rect;
     ofPtr<TextVisual>       m_text;
+    ofPtr<BasicVisual>      m_animationVisual; 
 
 };

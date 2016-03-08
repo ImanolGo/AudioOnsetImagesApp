@@ -70,6 +70,7 @@ void AppManager::setupManagers()
     m_imageManager.setup();
     m_audioManager.setup();
     m_previewManager.setup();
+    m_midiManager.setup();
    
     
     

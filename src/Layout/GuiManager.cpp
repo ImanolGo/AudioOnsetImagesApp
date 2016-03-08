@@ -73,6 +73,23 @@ void GuiManager::setupImageGui()
     m_fadeTime.addListener(imageManager, &ImageManager::onChangeFadeTime);
     m_parametersImage.add(m_fadeTime);
     
+    m_fadeTimeMin.set("Fade Time Min", 0.1, 0.1, 5.0);
+    m_fadeTimeMin.addListener(imageManager, &ImageManager::onChangeMinFadeTime);
+    m_parametersImage.add(m_fadeTimeMin);
+    
+    m_fadeTimeMax.set("Fade Time Max", 5, 0.1, 10.0);
+    m_fadeTimeMax.addListener(imageManager, &ImageManager::onChangeMaxFadeTime);
+    m_parametersImage.add(m_fadeTimeMax);
+    
+    m_randomFadeTime.set("Random Fade Time", false);
+    m_randomFadeTime.addListener(imageManager, &ImageManager::onChangeRandomFade);
+    m_parametersImage.add(m_randomFadeTime);
+    
+    m_randomImages.set("Random Images", false);
+    m_randomImages.addListener(imageManager, &ImageManager::onChangeRandomImages);
+    m_parametersImage.add(m_randomImages);
+
+    
     m_gui.add(m_parametersImage);
 }
 
@@ -85,6 +102,11 @@ void GuiManager::setupAudioGui()
     m_threshold.set("Threshold", 2.0, 0.5, 5.0);
     m_threshold.addListener(audioManager, &AudioManager::onChangeThreshold);
     m_parametersAudio.add(m_threshold);
+    
+    m_decayTime.set("Decay Time", 0.5, 0.01, 5.0);
+    m_decayTime.addListener(audioManager, &AudioManager::onChangeDecayTime);
+    m_parametersAudio.add(m_decayTime);
+
 
     m_gui.add(m_parametersAudio);
 }
@@ -123,7 +145,7 @@ void GuiManager::drawRectangle()
 {
     ofPushStyle();
     ofSetColor(ofColor::black);
-    ofRect( m_gui.getPosition().x - 20, 0, GUI_WIDTH + 60, ofGetHeight());
+    ofDrawRectangle( m_gui.getPosition().x - 20, 0, GUI_WIDTH + 60, ofGetHeight());
     ofPopStyle();
 }
 

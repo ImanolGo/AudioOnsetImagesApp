@@ -11,7 +11,7 @@
 #include "AudioManager.h"
 
 
-AudioManager::AudioManager(): m_volume(0.5), m_threshold(2.0), m_minimumThreshold(2.0), m_decayRate(0.1)
+AudioManager::AudioManager(): m_volume(0.5), m_threshold(2.0), m_minimumThreshold(2.0), m_decayRate(0.1), m_decayTime(0.5), m_maxThreshold(10)
 {
     //Intentionaly left empty
 }
@@ -41,7 +41,8 @@ void AudioManager::audioReceived(float* input, int bufferSize) {
 void AudioManager::setupBeatTracker()
 {
    
-
+    m_animationVisual =  ofPtr<BasicVisual>(new BasicVisual());
+    m_animationVisual->setAlpha(m_minimumThreshold);
 }
 
 void AudioManager::setupText()
@@ -107,19 +108,27 @@ void AudioManager::drawFFT()
     
     ofSetColor(255,255,255,70);
     
-     m_threshold = ofLerp(m_threshold, m_minimumThreshold, m_decayRate);
+    //m_threshold = ofLerp(m_threshold, m_minimumThreshold, m_decayRate);
+    m_threshold = m_animationVisual->getAlpha();
     
     if(m_beatTracker.isBeatRange(0,2,m_threshold)){
         ofSetColor(255,255,255,150);
         AppManager::getInstance().getImageManager().nextImage();
-        m_threshold = 10;
+        m_threshold = m_maxThreshold;
+        this->setAnimations();
     }
     
     
-    ofDrawRectangle(xOffset, yOffset,(FFT_BINS/2*3), - m_threshold*10);
+    ofDrawRectangle(xOffset, yOffset,(float)(FFT_BINS/2.0f*3.0f), (float) -m_threshold*10.0f);
     //ofDrawLine(xOffset,yOffset- m_threshold,  xOffset+(FFT_BINS/2*3),yOffset- m_threshold);
     ofDisableAlphaBlending();
     ofPopStyle();
+}
+
+void AudioManager::setAnimations()
+{
+    AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_animationVisual);
+    AppManager::getInstance().getVisualEffectsManager().createFadeEffect(m_animationVisual, m_maxThreshold, m_minimumThreshold, 0.0, m_decayTime);
 }
 
 void AudioManager::onChangeVolume(float& value)
@@ -133,6 +142,13 @@ void AudioManager::onChangeThreshold(float& value)
     m_minimumThreshold = value;
     //   m_fft.setVolume(m_volume);
 }
+
+void AudioManager::onChangeDecayTime(float& value)
+{
+    //m_decayRate = value;
+    m_decayTime = value;
+}
+
 
 
 
