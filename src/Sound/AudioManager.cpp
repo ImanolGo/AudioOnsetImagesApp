@@ -25,13 +25,17 @@ AudioManager::~AudioManager()
 
 void AudioManager::setup()
 {
-    Manager::setup();
+
+    if (m_initialized) {
+        return;
+    }
     
     ofLogNotice() <<"AudioManager::initialized" ;
     this->setupBeatTracker();
     this->setupText();
+    this->setupMidiNotes();
    
-   
+    Manager::setup();
 }
 
 void AudioManager::audioReceived(float* input, int bufferSize) {
@@ -43,6 +47,18 @@ void AudioManager::setupBeatTracker()
    
     m_animationVisual =  ofPtr<BasicVisual>(new BasicVisual());
     m_animationVisual->setAlpha(m_minimumThreshold);
+}
+
+void AudioManager::setupMidiNotes()
+{
+    m_notes.clear();
+    int offsetNote = 12;
+    int numberOfNotes = 12;
+    for (int i = 0; i<numberOfNotes; i++) {
+        int note = offsetNote + (i/2*5 + (i+1)/2*7);
+         ofLogNotice() <<"AudioManager::setupMidiNotes -> Index: " << i << ". note: " << note ;
+        m_notes.push_back(note);
+    }
 }
 
 void AudioManager::setupText()
@@ -116,6 +132,8 @@ void AudioManager::drawFFT()
         AppManager::getInstance().getImageManager().nextImage();
         m_threshold = m_maxThreshold;
         this->setAnimations();
+        this->sendAllNotesOff();
+        this->sendMidiNoteOn();
     }
     
     
@@ -130,6 +148,23 @@ void AudioManager::setAnimations()
     AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_animationVisual);
     AppManager::getInstance().getVisualEffectsManager().createFadeEffect(m_animationVisual, m_maxThreshold, m_minimumThreshold, 0.0, m_decayTime);
 }
+
+void AudioManager::sendAllNotesOff()
+{
+    int velocity = 0;
+    for (auto note : m_notes) {
+        AppManager::getInstance().getMidiManager().sendNote(note, velocity);
+    }
+}
+
+void AudioManager::sendMidiNoteOn()
+{
+    int velocity = 127;
+    int index =  AppManager::getInstance().getGuiManager().getCurrentNoteIndex();
+    int note = m_notes[index];
+    AppManager::getInstance().getMidiManager().sendNote(note, velocity);
+}
+
 
 void AudioManager::onChangeVolume(float& value)
 {

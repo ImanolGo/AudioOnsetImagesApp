@@ -10,7 +10,7 @@
 #pragma once
 
 #include "Manager.h"
-#include "ofxGui.h"
+#include "ofxGuiExtended.h"
 //========================== class GuiManager ==============================
 //============================================================================
 /** \class GuiManager GuiManager.h
@@ -56,6 +56,10 @@ public:
     
     ofPoint  getPosition() {return m_gui.getPosition();}
     
+    void  onNoteChange(bool& value);
+    
+    int  getCurrentNoteIndex();
+    
 private:
     
     void setupGuiParameters();
@@ -77,6 +81,8 @@ private:
     ofParameterGroup    m_parametersImage;
     ofParameterGroup    m_parametersAudio;
     
+    ofxGuiMatrix        m_matrixNotes;
+    
     
     ofParameter<float>    m_fadeTime;
     ofParameter<float>    m_fadeTimeMin;
@@ -84,8 +90,9 @@ private:
     ofParameter<bool>     m_randomImages;
     ofParameter<bool>     m_randomFadeTime;
     
-    ofParameter<float>    m_threshold;
-    ofParameter<float>    m_decayTime;
+    ofParameter<float>          m_threshold;
+    ofParameter<float>          m_decayTime;
+    vector<ofParameter<bool>>   m_notes_params;
     
    
     bool        m_showGui;  //It defines the whether the gui should be shown or not

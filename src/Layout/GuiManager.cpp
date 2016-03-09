@@ -57,7 +57,7 @@ void GuiManager::setupGuiParameters()
     m_gui.setPosition(MARGIN, MARGIN);
     //m_gui.setPosition(20, 20);
     m_gui.add(m_guiFPS.set("FPS", 0, 0, 60));
-    ofxGuiSetFont( "fonts/open-sans/OpenSans-Semibold.ttf", 9 );
+    ofxGuiSetFont( "fonts/open-sans/OpenSans-Semibold.ttf", 11 );
 
 }
 
@@ -106,9 +106,32 @@ void GuiManager::setupAudioGui()
     m_decayTime.set("Decay Time", 0.5, 0.01, 5.0);
     m_decayTime.addListener(audioManager, &AudioManager::onChangeDecayTime);
     m_parametersAudio.add(m_decayTime);
-
+    
+    
+    m_notes_params.push_back(ofParameter<bool>("C-1",false));
+    m_notes_params.push_back(ofParameter<bool>("G-1",false));
+    m_notes_params.push_back(ofParameter<bool>("C0",false));
+    m_notes_params.push_back(ofParameter<bool>("G0",false));
+    m_notes_params.push_back(ofParameter<bool>("C1",false));
+    m_notes_params.push_back(ofParameter<bool>("G1",false));
+    m_notes_params.push_back(ofParameter<bool>("C2",false));
+    m_notes_params.push_back(ofParameter<bool>("G2",false));
+    m_notes_params.push_back(ofParameter<bool>("C3",false));
+    m_notes_params.push_back(ofParameter<bool>("G3",false));
+    m_notes_params.push_back(ofParameter<bool>("C4",false));
+    m_notes_params.push_back(ofParameter<bool>("G4",false));
+    m_matrixNotes.setup("Notes",3);
+    for(unsigned int i = 0; i < m_notes_params.size(); i++) {
+        //m_notes_params.at(i).addListener(this, &GuiManager::onNoteChange);
+        m_matrixNotes.add(new ofxMinimalToggle(m_notes_params.at(i)));
+    }
+    //m_matrixNotes.setBorderColor(ofColor::aquamarine);
+    m_matrixNotes.setElementHeight(26);
+    m_matrixNotes.allowMultipleActiveToggles(false);
+    
 
     m_gui.add(m_parametersAudio);
+    m_gui.add(&m_matrixNotes);
 }
 
 
@@ -141,6 +164,11 @@ void GuiManager::toggleGui()
     m_showGui = !m_showGui;
 }
 
+int  GuiManager::getCurrentNoteIndex() 
+{
+    return m_matrixNotes.getActiveToggleIndex();
+}
+
 void GuiManager::drawRectangle()
 {
     ofPushStyle();
@@ -148,5 +176,19 @@ void GuiManager::drawRectangle()
     ofDrawRectangle( m_gui.getPosition().x - 20, 0, GUI_WIDTH + 60, ofGetHeight());
     ofPopStyle();
 }
+
+void GuiManager::onNoteChange(bool& value)
+{
+    
+    for(unsigned int i = 0; i < m_notes_params.size(); i++) {
+        if( value && (m_notes_params.at(i).get() == true)){
+            int index = m_matrixNotes.getActiveToggleIndex();
+            ofLogNotice() <<"GuiManager::onNoteChange -> Note: " << i << ", index = " << index;
+            
+            //ofLogNotice() <<"GuiManager::onNoteChange -> Note: " << i << ", value = " << value;
+        }
+    }
+}
+
 
 

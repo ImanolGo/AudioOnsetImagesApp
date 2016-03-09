@@ -62,12 +62,20 @@ private:
     void setupBeatTracker();
     
     void setupText();
+    
+    void setupMidiNotes();
 
     void drawFFT();
     
     void setAnimations();
 
+    void sendAllNotesOff();
+    
+    void sendMidiNoteOn();
+    
 private:
+    
+    typedef     vector<int>  MidiNoteVector;     ///<Vector of Midi Notes
 
     float           m_volume;
     ofxBeatTracking m_beatTracker;
@@ -78,8 +86,10 @@ private:
     float           m_decayRate;
     float           m_decayTime;
     
+    
     ofPtr<RectangleVisual>  m_rect;
     ofPtr<TextVisual>       m_text;
-    ofPtr<BasicVisual>      m_animationVisual; 
+    ofPtr<BasicVisual>      m_animationVisual;
+    MidiNoteVector          m_notes;
 
 };
