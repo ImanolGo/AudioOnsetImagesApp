@@ -79,27 +79,21 @@ void AppManager::setupManagers()
 
 void AppManager::update()
 {
-    
     m_visualEffectsManager.update();
     m_audioManager.update();
     m_viewManager.update();
     m_imageManager.update();
-
 }
 
 
 void AppManager::draw()
 {
-    
     ofClear(0);
-    
-    
     
     m_viewManager.draw();
     m_guiManager.draw();
     m_previewManager.draw();
     m_audioManager.draw();
-    
 }
 
 void AppManager::toggleDebugMode()

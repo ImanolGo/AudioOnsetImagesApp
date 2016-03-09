@@ -109,8 +109,8 @@ void AudioManager::drawFFT()
 {
     ofPushStyle();
     ofEnableAlphaBlending();
-    int xOffset = GuiManager::GUI_WIDTH + 2*GuiManager::MARGIN;
-    int yOffset = 100 + GuiManager::MARGIN + m_rect->getPosition().y + m_rect->getHeight();
+    float xOffset = GuiManager::GUI_WIDTH + 2*GuiManager::MARGIN;
+    float yOffset = 100 + GuiManager::MARGIN + m_rect->getPosition().y + m_rect->getHeight();
     for (int i = 1; i < FFT_BINS/2; i++){
         if(i % 16 == 0) {
             ofSetColor(200,0,0);
@@ -131,6 +131,7 @@ void AudioManager::drawFFT()
         ofSetColor(255,255,255,150);
         AppManager::getInstance().getImageManager().nextImage();
         m_threshold = m_maxThreshold;
+        m_animationVisual->setAlpha(m_maxThreshold);
         this->setAnimations();
         this->sendAllNotesOff();
         this->sendMidiNotesOn();
@@ -182,6 +183,7 @@ void AudioManager::onChangeVolume(float& value)
 void AudioManager::onChangeThreshold(float& value)
 {
     m_minimumThreshold = value;
+    m_animationVisual->setAlpha(m_minimumThreshold);
     //   m_fft.setVolume(m_volume);
 }
 

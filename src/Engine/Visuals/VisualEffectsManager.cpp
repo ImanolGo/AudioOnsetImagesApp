@@ -103,7 +103,7 @@ void VisualEffectsManager::createFadeEffect(ofPtr<BasicVisual> visual, double st
     if(!visual)
         return;
 
-	ofPtr<FadeVisual> fadeVisual = ofPtr<FadeVisual>(new FadeVisual(visual,QUINTIC,EASE_OUT));
+	ofPtr<FadeVisual> fadeVisual = ofPtr<FadeVisual>(new FadeVisual(visual,QUADRATIC,EASE_OUT));
 	fadeVisual->setParameters(startAlpha,endAlpha,animationTime);
 	fadeVisual->start(startAnimation);
 	this->addVisualEffect(fadeVisual);

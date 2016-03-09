@@ -99,7 +99,7 @@ void GuiManager::setupAudioGui()
 
     m_parametersAudio.setName("Audio");
     
-    m_threshold.set("Threshold", 2.0, 0.5, 5.0);
+    m_threshold.set("Threshold", 2.0, 0.5, 3.5);
     m_threshold.addListener(audioManager, &AudioManager::onChangeThreshold);
     m_parametersAudio.add(m_threshold);
     
