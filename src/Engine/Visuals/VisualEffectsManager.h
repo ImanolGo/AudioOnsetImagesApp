@@ -49,6 +49,13 @@ public:
 
 
     //==========================================================================
+    
+    //! Creates a certain value visual effect
+    void createValueEffect(ofPtr<BasicVisual> visual, double startValue,double endValue, double startAnimation, double animationTime);
+    
+    //! Creates a certain value visual effect
+    void createValueEffect(ofPtr<BasicVisual> visual, double endValue, double startAnimation, double animationTime);
+
 
     //! Creates a certain fading visual effect
 	void createFadeEffect(ofPtr<BasicVisual> visual, double startAlpha,double endAlpha, double startAnimation, double animationTime);

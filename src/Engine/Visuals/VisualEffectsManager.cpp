@@ -98,6 +98,30 @@ void VisualEffectsManager::removeVisualEffects(ofPtr<BasicVisual> visual, const 
 	}
 }
 
+
+void VisualEffectsManager::createValueEffect(ofPtr<BasicVisual> visual, double startValue,double endValue, double startAnimation, double animationTime)
+{
+    if(!visual)
+        return;
+    
+    ofPtr<ValueEffect> valueEffect = ofPtr<ValueEffect>(new ValueEffect(visual,CUBIC,EASE_OUT));
+    valueEffect->setParameters(startValue,endValue,animationTime);
+    valueEffect->start(startAnimation);
+    this->addVisualEffect(valueEffect);
+}
+
+void VisualEffectsManager::createValueEffect(ofPtr<BasicVisual> visual, double endValue, double startAnimation, double animationTime)
+{
+    if(!visual)
+        return;
+    
+    ofPtr<ValueEffect> valueEffect = ofPtr<ValueEffect>(new ValueEffect(visual,CUBIC,EASE_OUT));
+    valueEffect->setParameters(endValue,animationTime);
+    valueEffect->start(startAnimation);
+    this->addVisualEffect(valueEffect);
+}
+
+
 void VisualEffectsManager::createFadeEffect(ofPtr<BasicVisual> visual, double startAlpha,double endAlpha, double startAnimation, double animationTime)
 {
     if(!visual)

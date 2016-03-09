@@ -125,13 +125,12 @@ void AudioManager::drawFFT()
     ofSetColor(255,255,255,70);
     
     //m_threshold = ofLerp(m_threshold, m_minimumThreshold, m_decayRate);
-    m_threshold = m_animationVisual->getAlpha();
+    m_threshold = m_animationVisual->getValue();
     
     if(m_beatTracker.isBeatRange(0,2,m_threshold)){
         ofSetColor(255,255,255,150);
         AppManager::getInstance().getImageManager().nextImage();
         m_threshold = m_maxThreshold;
-        m_animationVisual->setAlpha(m_maxThreshold);
         this->setAnimations();
         this->sendAllNotesOff();
         this->sendMidiNotesOn();
@@ -147,7 +146,7 @@ void AudioManager::drawFFT()
 void AudioManager::setAnimations()
 {
     AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_animationVisual);
-    AppManager::getInstance().getVisualEffectsManager().createFadeEffect(m_animationVisual, m_maxThreshold, m_minimumThreshold, 0.0, m_decayTime);
+    AppManager::getInstance().getVisualEffectsManager().createValueEffect(m_animationVisual, m_maxThreshold, m_minimumThreshold, 0.0, m_decayTime);
 }
 
 void AudioManager::sendAllNotesOff()
@@ -183,7 +182,7 @@ void AudioManager::onChangeVolume(float& value)
 void AudioManager::onChangeThreshold(float& value)
 {
     m_minimumThreshold = value;
-    m_animationVisual->setAlpha(m_minimumThreshold);
+    m_animationVisual->setValue(m_minimumThreshold);
     //   m_fft.setVolume(m_volume);
 }
 

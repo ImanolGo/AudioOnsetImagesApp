@@ -210,6 +210,63 @@ double VisualEffect::function(double t, double from, double to, double duration)
 
 
 //==============================================================================
+//===============================  VALUE EFFECT ================================
+//==============================================================================
+
+ValueEffect::ValueEffect(ofPtr<BasicVisual> visual, EasingFunction function, EasingType type): VisualEffect(visual,function,type),
+m_value(1.0), m_startValue(0.0),m_endValue(1.0)
+{
+    m_name = "ValueEffect";
+}
+
+
+
+void ValueEffect::setParameters(double startValue,double endValue, double animationTime)
+{
+    m_elapsedTime = 0.0;
+    m_startValue = startValue;
+    m_endValue = endValue;
+    m_animationTime = animationTime;
+}
+
+void ValueEffect::setParameters(double endValue, double animationTime)
+{
+    m_elapsedTime = 0.0;
+    m_startValue = m_visual->getValue();
+    m_endValue = endValue;
+    m_animationTime = animationTime;
+}
+
+
+void ValueEffect::update()
+{
+    if(!m_isActive){
+        return;
+    }
+    
+    double dt = ofGetLastFrameTime();
+    
+    if(m_elaspedTimeToStart < m_startTime) {
+        m_elaspedTimeToStart += dt;
+        return;
+    }
+    
+    m_elapsedTime = m_elapsedTime + dt;
+    
+    if(m_elapsedTime >= m_animationTime) {
+        m_visual->setValue(m_endValue);
+        this->finish();
+        return;
+    }
+    
+    m_value = this->function(m_elapsedTime,m_startValue,m_endValue,m_animationTime);
+    m_visual->setValue(m_value);
+    
+}
+
+
+
+//==============================================================================
 //================================  FADE VISUAL ================================
 //==============================================================================
 

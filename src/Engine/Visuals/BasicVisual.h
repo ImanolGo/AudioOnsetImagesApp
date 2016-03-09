@@ -37,6 +37,9 @@ class BasicVisual
 
         //! Changes the alpha channel.
         virtual double getAlpha() const{ return m_color.a;}
+    
+        //! Changes the value
+        virtual double getValue() const{ return m_value;}
 
         //! Sets the color of the BasicVisual
         virtual void setColor(const ofColor& color) {m_color = color;}
@@ -52,6 +55,9 @@ class BasicVisual
 
         //! Sets the scale factor of the BasicVisual
         virtual void setScale(const ofVec3f& scale) {m_scale = scale;}
+    
+        //! Sets the value  of the BasicVisual
+        virtual void setValue(double value) {m_value = value;}
 
         //! Gets the scale factor of the BasicVisual
         virtual const ofVec3f& getScale() const{ return m_scale;}
@@ -79,6 +85,7 @@ class BasicVisual
         ofVec3f         m_position;     ///< defines the position of the BasicVisual
         float           m_width;        ///< the width of the BasicVisual
         float           m_height;       ///< the height of the BasicVisual
+        double          m_value;        ///< any value
         ofColor         m_color;        ///< color of the BasicVisual
         ofVec3f         m_scale;        ///< saves the current scale factor
         ofVec3f         m_rotation;     ///< saves the current rotation
