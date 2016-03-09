@@ -71,7 +71,7 @@ private:
 
     void sendAllNotesOff();
     
-    void sendMidiNoteOn();
+    void sendMidiNotesOn();
     
 private:
     

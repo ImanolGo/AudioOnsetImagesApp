@@ -1,0 +1,18 @@
+#pragma once
+
+#include "ofxGui.h"
+#include "ofxMinimalButton.h"
+#include "ofxMinimalToggle.h"
+#include "ofxLabelExtended.h"
+#include "ofxGuiGroupExtended.h"
+#include "ofxPanelExtended.h"
+#include "ofxRotarySlider.h"
+#include "ofxGuiMatrix.h"
+#include "ofxGuiSpacer.h"
+#include "ofxGuiPage.h"
+#include "ofxTabbedPages.h"
+#include "ofxGuiBaseDraws.h"
+#include "ofxGuiZoomableBaseDraws.h"
+#include "ofxValuePlotter.h"
+#include "ofxFpsPlotter.h"
+#include "ofxVerticalSlider.h"

@@ -122,12 +122,12 @@ void GuiManager::setupAudioGui()
     m_notes_params.push_back(ofParameter<bool>("G4",false));
     m_matrixNotes.setup("Notes",3);
     for(unsigned int i = 0; i < m_notes_params.size(); i++) {
-        //m_notes_params.at(i).addListener(this, &GuiManager::onNoteChange);
+        m_notes_params.at(i).addListener(this, &GuiManager::onNoteChange);
         m_matrixNotes.add(new ofxMinimalToggle(m_notes_params.at(i)));
     }
     //m_matrixNotes.setBorderColor(ofColor::aquamarine);
     m_matrixNotes.setElementHeight(26);
-    m_matrixNotes.allowMultipleActiveToggles(false);
+    //m_matrixNotes.allowMultipleActiveToggles(false);
     
 
     m_gui.add(m_parametersAudio);
@@ -169,6 +169,22 @@ int  GuiManager::getCurrentNoteIndex()
     return m_matrixNotes.getActiveToggleIndex();
 }
 
+vector<int>  GuiManager::getNoteIndexes()
+{
+    vector<int> noteIndexes;
+    
+    for(unsigned int i = 0; i < m_notes_params.size(); i++)
+    {
+        if( m_notes_params.at(i).get())
+        {
+            noteIndexes.push_back(i);
+        }
+    }
+            
+    return noteIndexes;
+}
+
+
 void GuiManager::drawRectangle()
 {
     ofPushStyle();
@@ -179,7 +195,6 @@ void GuiManager::drawRectangle()
 
 void GuiManager::onNoteChange(bool& value)
 {
-    
     for(unsigned int i = 0; i < m_notes_params.size(); i++) {
         if( value && (m_notes_params.at(i).get() == true)){
             int index = m_matrixNotes.getActiveToggleIndex();

@@ -60,6 +60,8 @@ public:
     
     int  getCurrentNoteIndex();
     
+    vector<int> getNoteIndexes();
+    
 private:
     
     void setupGuiParameters();
@@ -93,6 +95,7 @@ private:
     ofParameter<float>          m_threshold;
     ofParameter<float>          m_decayTime;
     vector<ofParameter<bool>>   m_notes_params;
+    vector<int>                 m_noteIndexes;
     
    
     bool        m_showGui;  //It defines the whether the gui should be shown or not

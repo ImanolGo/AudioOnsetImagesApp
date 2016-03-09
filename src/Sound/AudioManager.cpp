@@ -133,7 +133,7 @@ void AudioManager::drawFFT()
         m_threshold = m_maxThreshold;
         this->setAnimations();
         this->sendAllNotesOff();
-        this->sendMidiNoteOn();
+        this->sendMidiNotesOn();
     }
     
     
@@ -157,12 +157,19 @@ void AudioManager::sendAllNotesOff()
     }
 }
 
-void AudioManager::sendMidiNoteOn()
+void AudioManager::sendMidiNotesOn()
 {
     int velocity = 127;
-    int index =  AppManager::getInstance().getGuiManager().getCurrentNoteIndex();
-    int note = m_notes[index];
-    AppManager::getInstance().getMidiManager().sendNote(note, velocity);
+    //int index =  AppManager::getInstance().getGuiManager().getCurrentNoteIndex();
+    //int note = m_notes[index];
+    //AppManager::getInstance().getMidiManager().sendNote(note, velocity);
+    
+    vector<int> indexes =  AppManager::getInstance().getGuiManager().getNoteIndexes();
+    for(auto index: indexes)
+    {
+        int note = m_notes[index];
+        AppManager::getInstance().getMidiManager().sendNote(note, velocity);
+    }
 }
 
 

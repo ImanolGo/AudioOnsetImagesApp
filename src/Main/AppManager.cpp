@@ -66,11 +66,12 @@ void AppManager::setupManagers()
     m_keyboardManager.setup();
     m_viewManager.setup();
     m_visualEffectsManager.setup();
-    m_guiManager.setup();
+    
     m_imageManager.setup();
     m_audioManager.setup();
     m_previewManager.setup();
     m_midiManager.setup();
+    m_guiManager.setup();
    
     
     
