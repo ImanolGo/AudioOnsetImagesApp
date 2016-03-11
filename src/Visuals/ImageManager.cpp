@@ -18,7 +18,7 @@
 
 
 
-ImageManager::ImageManager(): Manager(), m_currentIndex(0), m_fadeTime(2.0), m_random(false), m_randomFade(false),m_fadeTimeMin(0), m_fadeTimeMax(10)
+ImageManager::ImageManager(): Manager(), m_currentIndex(0), m_fadeTime(2.0), m_random(false), m_randomFade(false),m_fadeTimeMin(0), m_fadeTimeMax(10), m_noFade(false), m_stop(false)
 {
 	//Intentionally left empty
 }
@@ -82,8 +82,10 @@ void ImageManager::nextImage()
 
     this->nextImageIndex();
     this->loadNextImage();
-    this->setAnimations();
-
+    
+    if(!m_noFade){
+        this->setAnimations();
+    }
 }
 
 void ImageManager::nextImageIndex()
@@ -134,6 +136,7 @@ void ImageManager::loadNextImage()
     m_currentImage->setResource(m_imageNames[m_currentIndex]);
     m_currentImage->setPosition(ofPoint(width*0.5,height*0.5));
     m_currentImage->setCentred(true);
+    m_currentImage->setAlpha(255);
 
 
     ofLogNotice()<< "ImageManager::loadNextImage-> Loading current image : " <<m_imageNames[m_currentIndex];
@@ -176,7 +179,7 @@ void ImageManager::update()
 void ImageManager::draw()
 {
     ofClear(0);
-    if(m_currentImage){
+    if(m_currentImage && !m_stop){
         m_currentImage->draw();
     }
 
@@ -202,10 +205,24 @@ void ImageManager::onChangeMaxFadeTime(float& value)
 void ImageManager::onChangeRandomImages(bool& value)
 {
     m_random = value;
+    if(!m_random){
+        m_currentIndex = m_imageNames.size() - 1;
+        //ofLogNotice()<< "ImageManager::loadNextImage-> Set to image: " << m_currentIndex;
+    }
 }
 
 void ImageManager::onChangeRandomFade(bool& value)
 {
     m_randomFade = value;
+}
+
+void ImageManager::onChangeNoFade(bool& value)
+{
+    m_noFade = value;
+}
+
+void ImageManager::onChangeStop(bool &value)
+{
+    m_stop = value;
 }
 

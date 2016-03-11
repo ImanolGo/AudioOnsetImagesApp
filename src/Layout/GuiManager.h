@@ -91,6 +91,8 @@ private:
     ofParameter<float>    m_fadeTimeMax;
     ofParameter<bool>     m_randomImages;
     ofParameter<bool>     m_randomFadeTime;
+    ofParameter<bool>     m_noFade;
+    ofParameter<bool>     m_stop;
     
     ofParameter<float>          m_threshold;
     ofParameter<float>          m_decayTime;

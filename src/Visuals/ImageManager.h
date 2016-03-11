@@ -54,6 +54,10 @@ class ImageManager: public Manager
     
         void onChangeRandomFade(bool& value);
     
+        void onChangeNoFade(bool& value);
+    
+        void onChangeStop(bool& value);
+    
 
     private:
 
@@ -88,6 +92,8 @@ class ImageManager: public Manager
         float                   m_fadeTimeMax;      ///< maximum fade time of random selection
         bool                    m_random;           ///< defines wether the images are selected randomly or in order
         bool                    m_randomFade;       ///< defines wether the images fade time are random or not
+        bool                    m_noFade;           ///< defines if the image needs to fade or not
+        bool                    m_stop;             ///< defines if the images will be shown or not
     
         ofPtr<ImageVisual>      m_currentImage;  ///< current image to be displayed
 

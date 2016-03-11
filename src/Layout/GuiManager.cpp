@@ -69,7 +69,7 @@ void GuiManager::setupImageGui()
 
     m_parametersImage.setName("Images");
     
-    m_fadeTime.set("Fade Time", 2.0, 0.1, 10.0);
+    m_fadeTime.set("Fade Time", 2.0, 0.1, 30.0);
     m_fadeTime.addListener(imageManager, &ImageManager::onChangeFadeTime);
     m_parametersImage.add(m_fadeTime);
     
@@ -80,6 +80,15 @@ void GuiManager::setupImageGui()
     m_fadeTimeMax.set("Fade Time Max", 5, 0.1, 10.0);
     m_fadeTimeMax.addListener(imageManager, &ImageManager::onChangeMaxFadeTime);
     m_parametersImage.add(m_fadeTimeMax);
+    
+    m_stop.set("Stop", false);
+    m_stop.addListener(imageManager, &ImageManager::onChangeStop);
+    m_parametersImage.add(m_stop);
+    
+    
+    m_noFade.set("No fading", false);
+    m_noFade.addListener(imageManager, &ImageManager::onChangeNoFade);
+    m_parametersImage.add(m_noFade);
     
     m_randomFadeTime.set("Random Fade Time", false);
     m_randomFadeTime.addListener(imageManager, &ImageManager::onChangeRandomFade);
