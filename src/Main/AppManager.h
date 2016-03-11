@@ -22,6 +22,8 @@
 #include "PreviewManager.h"
 #include "AudioManager.h"
 #include "MidiManager.h"
+#include "OscManager.h"
+
 
 
 //========================== class AppManager ==============================
@@ -79,6 +81,9 @@ public:
     //! Returns the MIDI Manager
     MidiManager&  getMidiManager() { return m_midiManager; }
     
+    //! Returns the OSC Manager
+    OscManager&  getOscManager() { return m_oscManager; }
+    
 
     //==========================================================================
 
@@ -122,6 +127,7 @@ private:
     PreviewManager           m_previewManager;           ///< Manages the preview
     AudioManager             m_audioManager;             ///< Manages the audio
     MidiManager              m_midiManager;              ///< Manages the MIDI
+    OscManager               m_oscManager;               ///< Manages the OSC messages
 
     bool                     m_debugMode;
 };

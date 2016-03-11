@@ -48,6 +48,13 @@ class SettingsManager: public Manager
         float getAppHeight() const {return m_appHeight;}
     
         string getIpAddress() const {return m_ipAddress;}
+    
+        int getOscPortReceive() const {return m_portOscReceive;}
+    
+        int getOscPortSend() const {return m_portOscSend;}
+    
+        int getUdpPortReceive() const {return m_portUdpReceive;}
+    
 
         int getPort() const {return m_port;}
 
@@ -91,7 +98,11 @@ class SettingsManager: public Manager
         float                   m_appWidth;             ///< stores the applications width
         float                   m_appHeight;            ///< stores the applications height
         int                     m_port;                 ///< stores the UDP port used for the Network communications
+        int                     m_portUdpReceive;       ///< stores the UDP port to receive UDP messages from
+        int                     m_portOscReceive;       ///< stores the UDP port to receive OSC messages from
+        int                     m_portOscSend;          ///< stores the UDP port to send OSC messages to
         string                  m_ipAddress;             ///< stores the Ip Address used for the Network communications
+    
     
 };
 

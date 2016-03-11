@@ -214,5 +214,17 @@ void GuiManager::onNoteChange(bool& value)
     }
 }
 
+void GuiManager::setNote(const ofVec2f& value)
+{
+    int index = (int) value.x;
+    
+    if(index < 0 || index >= m_notes_params.size()){
+        return;
+    }
+    
+    bool isOn = value.y>0;
+    m_notes_params.at(index) = isOn;
+}
+
 
 

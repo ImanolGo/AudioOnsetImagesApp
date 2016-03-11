@@ -2,9 +2,11 @@
 <settings>
 
   <of_settings>
-	<window title="AudioOnsetImagesApp" x="0" y="0" width="1280" height="1024" fullscreen="0"/>
-	<debug showCursor="1" setVerbose="0"/>
-	<network ipAddress="127.0.0.1" port="7890"/>
+
+	   <window title="AudioOnsetImagesApp" x="0" y="0" width="1280" height="1024" fullscreen="0"/>
+	    <debug showCursor="1" setVerbose="0"/>
+      <network ipAddress="murmurtop.local" portOscSend="7890" portOscReceive="50000" portUdpReceive="44409" portOscUnity="8000"/>
+
   </of_settings>
 
   <textures>

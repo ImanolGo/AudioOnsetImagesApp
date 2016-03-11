@@ -90,6 +90,10 @@ void ImageManager::nextImage()
 
 void ImageManager::nextImageIndex()
 {
+    if (m_stop) {
+        return;
+    }
+    
     if(m_random){
         this->nextRandomImageIndex();
     }
@@ -178,8 +182,12 @@ void ImageManager::update()
 
 void ImageManager::draw()
 {
+    if (m_stop) {
+        return;
+    }
+    
     ofClear(0);
-    if(m_currentImage && !m_stop){
+    if(m_currentImage){
         m_currentImage->draw();
     }
 
@@ -224,5 +232,10 @@ void ImageManager::onChangeNoFade(bool& value)
 void ImageManager::onChangeStop(bool &value)
 {
     m_stop = value;
+    
+    if(m_stop){
+        AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_currentImage);
+        m_currentImage->setAlpha(0);
+    }
 }
 

@@ -62,6 +62,26 @@ public:
     
     vector<int> getNoteIndexes();
     
+    void setFadeTime(float value) {m_fadeTime = value;}
+    
+    void setFadeTimeMin(float value) {m_fadeTimeMin = value;}
+    
+    void setFadeTimeMax(float value) {m_fadeTimeMax = value;}
+    
+    void setRandomImages(bool value) {m_randomImages = value;}
+    
+    void setRandomFadeTime(bool value) {m_randomFadeTime = value;}
+    
+    void setStop(bool value) {m_stop = value;}
+    
+    void setNoFade(bool value) {m_noFade = value;}
+    
+    void setThreshold(float value) {m_threshold = value;}
+    
+    void setDecayTime(float value) {m_decayTime = value;}
+    
+    void setNote(const ofVec2f& value);
+    
 private:
     
     void setupGuiParameters();
