@@ -50,7 +50,10 @@ void AudioOnsetImagesApp::drawScreen2(ofEventArgs & args){
     //AppManager::getInstance().getImageManager().draw();
 }
 
-void AudioOnsetImagesApp::audioReceived(float* input, int bufferSize, int nChannels) {
-    AppManager::getInstance().getAudioManager().audioReceived(input, bufferSize);
+
+void AudioOnsetImagesApp::audioIn(float * input, int bufferSize, int nChannels)
+{
+    AppManager::getInstance().getAudioManager().audioIn(input, bufferSize, nChannels);
 }
+
 

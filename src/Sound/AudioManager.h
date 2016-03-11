@@ -11,11 +11,10 @@
 
 #include "Manager.h"
 
-#include "ofxBeatTracking.h"
 #include "TextVisual.h"
-
 #include "RectangleVisual.h"
 #include "BasicVisual.h"
+#include "ofxFFTLive.h"
 
 
 //========================== class AudioManager ==============================
@@ -54,18 +53,20 @@ public:
     
     void onChangeDecayTime(float& value);
     
-    void audioReceived(float* input, int bufferSize);
-
+    void audioIn(float * input, int bufferSize, int nChannels);
+    
 
 private:
 
-    void setupBeatTracker();
+    void setupFft();
     
     void setupText();
     
     void setupMidiNotes();
 
     void drawFFT();
+    
+    void updateOnsetDetector();
     
     void setAnimations();
 
@@ -76,9 +77,10 @@ private:
 private:
     
     typedef     vector<int>  MidiNoteVector;     ///<Vector of Midi Notes
+    
+    ofxFFTLive      m_fftLive;
 
     float           m_volume;
-    ofxBeatTracking m_beatTracker;
     float           m_audioMax;
     float           m_threshold;
     float           m_minimumThreshold;

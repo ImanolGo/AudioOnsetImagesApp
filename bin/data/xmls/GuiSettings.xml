@@ -1,5 +1,5 @@
 <GUI>
-	<FPS>59.9943</FPS>
+	<FPS>60.0355</FPS>
 	<Images>
 		<Fade_Time>1.45656</Fade_Time>
 	<Random_Images>0</Random_Images>
@@ -8,14 +8,14 @@
 		<Random_Fade_Time>0</Random_Fade_Time>
 	</Images>
 	<Audio>
-		<Threshold>1.42711</Threshold>
-	<Decay_Time>1.77032</Decay_Time>
+		<Threshold>0.0291545</Threshold>
+	<Decay_Time>0.490087</Decay_Time>
 	<Decay_Rate>0.154315</Decay_Rate>
 	</Audio>
 <GUI/>
 <group/>
 <Notes>
-		<C-1>1</C-1>
+		<C-1>0</C-1>
 		<G-1>0</G-1>
 		<C0>0</C0>
 		<G0>0</G0>

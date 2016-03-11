@@ -11,7 +11,7 @@
 #include "AudioManager.h"
 
 
-AudioManager::AudioManager(): m_volume(0.5), m_threshold(2.0), m_minimumThreshold(2.0), m_decayRate(0.1), m_decayTime(0.5), m_maxThreshold(10)
+AudioManager::AudioManager(): m_volume(0.5), m_threshold(2.0), m_minimumThreshold(0.0), m_decayRate(0.1), m_decayTime(0.5), m_maxThreshold(1.0)
 {
     //Intentionaly left empty
 }
@@ -31,22 +31,22 @@ void AudioManager::setup()
     }
     
     ofLogNotice() <<"AudioManager::initialized" ;
-    this->setupBeatTracker();
+    this->setupFft();
     this->setupText();
     this->setupMidiNotes();
    
     Manager::setup();
 }
 
-void AudioManager::audioReceived(float* input, int bufferSize) {
-    m_beatTracker.audioReceived(input, bufferSize);
-}
 
-void AudioManager::setupBeatTracker()
+void AudioManager::setupFft()
 {
    
     m_animationVisual =  ofPtr<BasicVisual>(new BasicVisual());
-    m_animationVisual->setAlpha(m_minimumThreshold);
+    m_animationVisual->setValue(m_minimumThreshold);
+    
+    m_fftLive.setMirrorData(false);
+    m_fftLive.setup();
 }
 
 void AudioManager::setupMidiNotes()
@@ -97,7 +97,28 @@ void AudioManager::setupText()
 
 void AudioManager::update()
 {
-     m_beatTracker.updateFFT();
+    //ofLogNotice() <<"AudioManager::update" ;
+    m_fftLive.update();
+    this->updateOnsetDetector();
+    
+    //ofLogNotice() <<"AudioManager::peak -> " << m_fftLive.getAveragePeak() ;
+
+}
+
+void AudioManager::updateOnsetDetector()
+{
+    //m_threshold = ofLerp(m_threshold, m_minimumThreshold, m_decayRate);
+    m_threshold = m_animationVisual->getValue();
+    m_fftLive.setThreshold(m_threshold);
+    
+     if(m_fftLive.getAveragePeak() > m_threshold)
+     {
+        AppManager::getInstance().getImageManager().nextImage();
+        m_threshold = m_maxThreshold;
+        this->setAnimations();
+        this->sendAllNotesOff();
+        this->sendMidiNotesOn();
+    }
 }
 
 void AudioManager::draw()
@@ -107,40 +128,12 @@ void AudioManager::draw()
 
 void AudioManager::drawFFT()
 {
-    ofPushStyle();
-    ofEnableAlphaBlending();
+    
     float xOffset = GuiManager::GUI_WIDTH + 2*GuiManager::MARGIN;
-    float yOffset = 100 + GuiManager::MARGIN + m_rect->getPosition().y + m_rect->getHeight();
-    for (int i = 1; i < FFT_BINS/2; i++){
-        if(i % 16 == 0) {
-            ofSetColor(200,0,0);
-        } else {
-            ofSetColor(250,250,250);
-        }
-        ofDrawLine(xOffset+(i*3),yOffset,  xOffset+(i*3),yOffset- m_beatTracker.magnitude[i]*10.0f);
-        //printf("%f \n", magnitude_average[i]);
-    }
+    float yOffset = GuiManager::MARGIN + m_rect->getPosition().y + m_rect->getHeight();
     
-    
-    ofSetColor(255,255,255,70);
-    
-    //m_threshold = ofLerp(m_threshold, m_minimumThreshold, m_decayRate);
-    m_threshold = m_animationVisual->getValue();
-    
-    if(m_beatTracker.isBeatRange(0,2,m_threshold)){
-        ofSetColor(255,255,255,150);
-        AppManager::getInstance().getImageManager().nextImage();
-        m_threshold = m_maxThreshold;
-        this->setAnimations();
-        this->sendAllNotesOff();
-        this->sendMidiNotesOn();
-    }
-    
-    
-    ofDrawRectangle(xOffset, yOffset,(float)(FFT_BINS/2.0f*3.0f), (float) -m_threshold*10.0f);
-    //ofDrawLine(xOffset,yOffset- m_threshold,  xOffset+(FFT_BINS/2*3),yOffset- m_threshold);
-    ofDisableAlphaBlending();
-    ofPopStyle();
+    m_fftLive.draw(xOffset, yOffset);
+
 }
 
 void AudioManager::setAnimations()
@@ -198,5 +191,11 @@ void AudioManager::onChangeDecayTime(float& value)
 float AudioManager::getAudioMax()
 {
     return m_audioMax;
+}
+
+
+void AudioManager::audioIn(float * input, int bufferSize, int nChannels)
+{
+    m_fftLive.audioIn(input, bufferSize, nChannels);
 }
 

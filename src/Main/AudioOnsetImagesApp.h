@@ -20,5 +20,6 @@ class AudioOnsetImagesApp : public ofBaseApp{
     
         void drawScreen2(ofEventArgs & args);
     
-        void audioReceived(float* input, int bufferSize, int nChannels);
+        void audioIn(float * input, int bufferSize, int nChannels);
+    
 };
