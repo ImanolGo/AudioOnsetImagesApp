@@ -81,6 +81,7 @@ void AppManager::update()
 {
     m_oscManager.update();
     m_visualEffectsManager.update();
+    m_guiManager.update();
     m_audioManager.update();
     m_viewManager.update();
     m_imageManager.update();

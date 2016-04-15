@@ -34,6 +34,8 @@ public:
     void setup();
     
     void sendNote(int note, int velocity);
+    
+    void onChangeChannel(int & channel) {m_channel = channel;}
 
 
 private:

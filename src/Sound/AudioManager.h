@@ -66,6 +66,8 @@ private:
 
     void drawFFT();
     
+    void drawRMS();
+    
     void updateOnsetDetector();
     
     void setAnimations();

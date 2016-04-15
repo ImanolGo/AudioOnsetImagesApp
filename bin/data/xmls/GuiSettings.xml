@@ -1,23 +1,20 @@
 <GUI>
-	<FPS>59.9377</FPS>
+	<FPS>58.3322</FPS>
 	<Images>
-		<Fade_Time>21.1085</Fade_Time>
-	<Random_Images>0</Random_Images>
-	<Fade_Time_Min>0.1</Fade_Time_Min>
+		<Fade_Time>2</Fade_Time>
+		<Fade_Time_Min>0.1</Fade_Time_Min>
 		<Fade_Time_Max>5</Fade_Time_Max>
-		<Random_Fade_Time>0</Random_Fade_Time>
-	<Stop>0</Stop>
+		<Stop>0</Stop>
 		<No_fading>0</No_fading>
+		<Random_Fade_Time>0</Random_Fade_Time>
+		<Random_Images>0</Random_Images>
 	</Images>
 	<Audio>
-		<Threshold>0.766764</Threshold>
-	<Decay_Time>0.490087</Decay_Time>
-	<Decay_Rate>0.154315</Decay_Rate>
+		<Threshold>0.282799</Threshold>
+		<Decay_Time>0.5</Decay_Time>
 	</Audio>
-<GUI/>
-<group/>
-<Notes>
-		<C-1>1</C-1>
+	<Notes>
+		<C-1>0</C-1>
 		<G-1>0</G-1>
 		<C0>0</C0>
 		<G0>0</G0>
@@ -27,7 +24,13 @@
 		<G2>0</G2>
 		<C3>0</C3>
 		<G3>0</G3>
-		<C4>1</C4>
+		<C4>0</C4>
 		<G4>0</G4>
 	</Notes>
+	<Presets>
+		<Lala1>0</Lala1>
+		<Lala2>1</Lala2>
+		<Lala3>0</Lala3>
+	</Presets>
+<GUI/>
 </GUI>

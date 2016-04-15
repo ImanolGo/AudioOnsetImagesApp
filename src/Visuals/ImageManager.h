@@ -44,6 +44,8 @@ class ImageManager: public Manager
     
         void nextImage();
     
+        void previousImage();
+    
         void onChangeFadeTime(float& value);
     
         void onChangeMinFadeTime(float& value);
@@ -58,10 +60,16 @@ class ImageManager: public Manager
     
         void onChangeStop(bool& value);
     
+        void setImageGroup(int index);
+    
+        const vector<string>& getFoldersNames() {return m_folderNames;}
+    
 
     private:
 
         void loadImages();
+    
+        bool loadSubfolder(ofDirectory& dir, int index);
     
         string getImageName(const string& path);
     
@@ -73,18 +81,26 @@ class ImageManager: public Manager
     
         void nextImageIndex();
     
+        void previousImageIndex();
+    
         void nextRandomImageIndex();
     
         void nextOrderedImageIndex();
+    
+        void previousImageOrderedIndex();
 
 
     private:
     
-        typedef                 vector<string>          ImageNameVector;       ///< defines a vector of images names
-        typedef                 vector<int>             IndexVector;       ///< defines a vector of indexes
+        typedef                 vector<string>                  FolderNameVector;      ///< defines a vector of folder names
+        typedef                 vector<string>                  ImageNameVector;       ///< defines a vector of images names
+        typedef                 map<int,ImageNameVector>        ImageNameVectorMap;    ///< defines a map of image name vector
+        typedef                 vector<int>                     IndexVector;           ///< defines a vector of indexes
     
-        ImageNameVector         m_imageNames;       ///< image names sorted by name
-        IndexVector             m_indexes;          ///< current available indexes
+        FolderNameVector        m_folderNames;          ///< folder names
+        ImageNameVectorMap      m_imageNames;           ///< groups of image names
+        ImageNameVector         m_currentImageNames;    ///< image names sorted by name
+        IndexVector             m_indexes;              ///< current available indexes
     
         int                     m_currentIndex;     ///< current image index
         float                   m_fadeTime;         ///< fade time for the animations

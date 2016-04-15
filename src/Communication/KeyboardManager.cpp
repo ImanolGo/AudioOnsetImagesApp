@@ -60,6 +60,10 @@ void KeyboardManager::keyPressed(ofKeyEventArgs &e)
     if(key == OF_KEY_RIGHT) {
         AppManager::getInstance().getImageManager().nextImage();
     }
+    
+    if(key == OF_KEY_LEFT) {
+        AppManager::getInstance().getImageManager().previousImage();
+    }
 
 
 }

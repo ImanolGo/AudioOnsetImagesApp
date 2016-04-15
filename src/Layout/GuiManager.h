@@ -39,6 +39,9 @@ public:
     //! Set-up the gui
     void setup();
     
+    //! update the gui
+    void update();
+    
     //! Draw the gui
     void draw();
     
@@ -57,6 +60,8 @@ public:
     ofPoint  getPosition() {return m_gui.getPosition();}
     
     void  onNoteChange(bool& value);
+    
+    void  onPresetChange(bool& value);
     
     int  getCurrentNoteIndex();
     
@@ -90,7 +95,11 @@ private:
     
     void setupAudioGui();
     
+    void setupPresets();
+    
     void drawRectangle();
+    
+    void updatePresets();
 
 private:
     
@@ -102,8 +111,11 @@ private:
     
     ofParameterGroup    m_parametersImage;
     ofParameterGroup    m_parametersAudio;
+    ofParameterGroup    m_parametersPresets;
     
     ofxGuiMatrix        m_matrixNotes;
+    
+    ofxGuiMatrix        m_matrixPresets;
     
     
     ofParameter<float>    m_fadeTime;
@@ -116,9 +128,13 @@ private:
     
     ofParameter<float>          m_threshold;
     ofParameter<float>          m_decayTime;
+    ofParameter<int>            m_midiChannel;
     vector<ofParameter<bool>>   m_notes_params;
     vector<int>                 m_noteIndexes;
     
+    vector<ofParameter<bool>>   m_presetParameters;
+    
+    int m_currentPreset;
    
     bool        m_showGui;  //It defines the whether the gui should be shown or not
 };

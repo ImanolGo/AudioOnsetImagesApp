@@ -41,7 +41,10 @@ void ImageManager::setup()
     m_currentImage =  ofPtr<ImageVisual>(new ImageVisual());
 
     this->loadImages();
+    this->setImageGroup(0);
     this->loadNextImage();
+    m_currentImage->setAlpha(0);
+    
     ofLogNotice() <<"ImageManager::initialized" ;
 
 }
@@ -50,33 +53,78 @@ void ImageManager::setup()
 
 void ImageManager::loadImages()
 {
+    ofLogNotice() <<"ImageManager::loading images ..." ;
     //some path, may be absolute or relative to bin/data
-    string path = "images/performance";
+    string path = "images/performance/";
     ofDirectory dir(path);
+    dir.listDir();
+    
+    ofLogNotice() <<"ImageManager::directory size: " << dir.size() ;
+    
+    for(int i = 0; i < dir.size(); i++)
+    {
+        string pathAux =  dir.getPath(i);
+        ofDirectory dirAux(pathAux);
+        if(this->loadSubfolder(dirAux, i))
+        {
+            m_folderNames.push_back(dir.getName(i));
+            ofLogNotice()<< "ImageManager::loadImages-> Added folder: " << dir.getName(i);
+        }
+        
+    }
+   
+
+    
+}
+
+bool ImageManager::loadSubfolder(ofDirectory& dir, int index)
+{
+    ofLogNotice() <<"ImageManager::loading subfolders ..." ;
     //only show png files
     dir.allowExt("png");
     dir.allowExt("jpeg");
     dir.allowExt("jpg");
     //populate the directory object
-    dir.listDir();
-
-    ofLogNotice()<< "ImageManager::loadImages-> Path: " << dir.getAbsolutePath();
-    ofLogNotice()<< "ImageManager::loadImages-> Size: " << dir.size();
-
+    
+    
+    if(dir.listDir()==0){
+        ofLogNotice()<< "ImageManager::loadSubfolder-> No image files found in: " << dir.getAbsolutePath();
+        return false;
+    }
+    
+        
+    ofLogNotice()<< "ImageManager::loadSubfolder-> Path: " << dir.getAbsolutePath();
+    ofLogNotice()<< "ImageManager::loadSubfolder-> Size: " << dir.size();
+    
+    ImageNameVector images;
+    
     //go through and print out all the paths
     for(int i = 0; i < dir.size(); i++){
         string name = this->getImageName(dir.getPath(i));
-        ofLogNotice()<< "ImageManager::loadImages-> Loaded: " << name;
+        ofLogNotice()<< "ImageManager::loadSubfolder-> Loaded: " << name;
         AppManager::getInstance().getResourceManager().addTexture(name, dir.getPath(i));
-        m_imageNames.push_back(name);
+        images.push_back(name);
+    }
+    
+    m_imageNames[index] = images;
+    
+    return true;
+    
+}
 
+void ImageManager::setImageGroup(int index)
+{
+    if(m_imageNames.find(index)!=m_imageNames.end()){
+        m_currentImageNames = m_imageNames[index];
+        m_indexes.empty();
+        m_currentIndex = 0;
+        //this->nextImage();
     }
 }
 
-
 void ImageManager::nextImage()
 {
-    if(m_imageNames.empty()){
+    if(m_currentImageNames.empty()){
         return;
     }
 
@@ -86,6 +134,36 @@ void ImageManager::nextImage()
     if(!m_noFade){
         this->setAnimations();
     }
+}
+
+void ImageManager::previousImage()
+{
+    if(m_currentImageNames.empty()){
+        return;
+    }
+    
+    this->previousImageIndex();
+    this->loadNextImage();
+    
+    if(!m_noFade){
+        this->setAnimations();
+    }
+}
+
+void ImageManager::previousImageIndex()
+{
+    if (m_stop) {
+        return;
+    }
+    
+    if(m_random){
+        this->nextRandomImageIndex();
+    }
+    else{
+        this->previousImageOrderedIndex();
+    }
+    
+    //ofLogNotice()<< "ImageManager::nextImageIndex-> current index : " << m_currentIndex;
 }
 
 void ImageManager::nextImageIndex()
@@ -107,13 +185,22 @@ void ImageManager::nextImageIndex()
 void ImageManager::nextOrderedImageIndex()
 {
     
-    m_currentIndex = (m_currentIndex+1)%m_imageNames.size();
+    m_currentIndex = (m_currentIndex+1)%m_currentImageNames.size();
+}
+
+void ImageManager::previousImageOrderedIndex()
+{
+    m_currentIndex--;
+    if(m_currentIndex<0){
+        m_currentIndex = m_currentImageNames.size()-1;
+    }
+    
 }
 
 void ImageManager::nextRandomImageIndex()
 {
     if(m_indexes.empty()){
-        for(int i = 0; i < m_imageNames.size(); i++){
+        for(int i = 0; i < m_currentImageNames.size(); i++){
             m_indexes.push_back(i);
         }
     }
@@ -137,13 +224,13 @@ void ImageManager::loadNextImage()
     float height = windowSettings[1].height;
 
 
-    m_currentImage->setResource(m_imageNames[m_currentIndex]);
+    m_currentImage->setResource(m_currentImageNames[m_currentIndex]);
     m_currentImage->setPosition(ofPoint(width*0.5,height*0.5));
     m_currentImage->setCentred(true);
     m_currentImage->setAlpha(255);
 
 
-    ofLogNotice()<< "ImageManager::loadNextImage-> Loading current image : " <<m_imageNames[m_currentIndex];
+    //ofLogNotice()<< "ImageManager::loadNextImage-> Loading current image : " <<m_currentImageNames[m_currentIndex];
     if(m_currentImage->getOriginalWidth() > m_currentImage->getOriginalHeight()){
         m_currentImage->setWidth(width,true);
     }
@@ -214,7 +301,7 @@ void ImageManager::onChangeRandomImages(bool& value)
 {
     m_random = value;
     if(!m_random){
-        m_currentIndex = m_imageNames.size() - 1;
+        m_currentIndex = m_currentImageNames.size() - 1;
         //ofLogNotice()<< "ImageManager::loadNextImage-> Set to image: " << m_currentIndex;
     }
 }
