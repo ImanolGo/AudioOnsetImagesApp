@@ -274,10 +274,6 @@ void ImageManager::update()
 
 void ImageManager::draw()
 {
-    if (m_stop) {
-        return;
-    }
-    
     ofClear(0);
     if(m_currentImage){
         m_currentImage->draw();
@@ -329,5 +325,20 @@ void ImageManager::stop(bool value)
         AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_currentImage);
         m_currentImage->setAlpha(0);
     }
+}
+
+void ImageManager::pause(bool value)
+{
+    m_stop = value;
+    
+     ofLogNotice()<< "ImageManager::pause-> Pause: " << m_stop;
+    
+    if(m_stop){
+        AppManager::getInstance().getVisualEffectsManager().stopAllVisualEffects(m_currentImage);
+    }
+    else{
+        AppManager::getInstance().getVisualEffectsManager().continueAllVisualEffects(m_currentImage);
+    }
+    
 }
 

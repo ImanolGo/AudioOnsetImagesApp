@@ -40,7 +40,12 @@ public:
 	//! Removes a certain visual effect from the list
 	void removeVisualEffect(ofPtr<VisualEffect>  visualEffect);
     
-
+    //! Stops all visual effects for the specified visual
+    void stopAllVisualEffects(ofPtr<BasicVisual> visual);
+    
+    //! Continues all visual effects for the specified visual
+    void continueAllVisualEffects(ofPtr<BasicVisual> visual);
+    
 	//! Removes all visual effects for the specified visual
 	void removeAllVisualEffects(ofPtr<BasicVisual> visual);
 

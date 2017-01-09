@@ -38,6 +38,12 @@ void VisualEffect::stop()
 	m_isActive = false;
 }
 
+void VisualEffect::follow()
+{
+    m_isActive = true;
+}
+
+
 void VisualEffect::finish()
 {
     m_isFinished = true;

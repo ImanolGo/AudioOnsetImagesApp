@@ -131,7 +131,8 @@ void AppManager::onChangeStop(bool& value)
 
 void AppManager::onChangePause(bool& value)
 {
-    
+    m_imageManager.pause(value);
+    m_audioManager.stop(value);
 }
 
 

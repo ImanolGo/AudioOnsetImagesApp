@@ -86,6 +86,29 @@ void VisualEffectsManager::removeAllVisualEffects(ofPtr<BasicVisual> visual)
 	}
 }
 
+void VisualEffectsManager::stopAllVisualEffects(ofPtr<BasicVisual> visual)
+{
+    for(VisualEffectVector::iterator it = m_visualEffects.begin(); it != m_visualEffects.end(); ++it) {
+        if((*it)->getVisual() == visual) {
+            (*it)->stop();
+        }
+      
+    }
+}
+
+void VisualEffectsManager::continueAllVisualEffects(ofPtr<BasicVisual> visual)
+{
+    for(VisualEffectVector::iterator it = m_visualEffects.begin(); it != m_visualEffects.end(); ++it) {
+        if((*it)->getVisual() == visual) {
+            (*it)->follow();
+        }
+        
+    }
+}
+
+
+
+
 void VisualEffectsManager::removeVisualEffects(ofPtr<BasicVisual> visual, const string& visualEffectName)
 {
 	for(VisualEffectVector::iterator it = m_visualEffects.begin(); it != m_visualEffects.end();) {

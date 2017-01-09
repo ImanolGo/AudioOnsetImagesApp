@@ -64,6 +64,8 @@ class ImageManager: public Manager
     
         void stop(bool value);
     
+        void pause(bool value);
+    
 
     private:
 

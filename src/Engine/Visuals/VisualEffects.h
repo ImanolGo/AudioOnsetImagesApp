@@ -56,6 +56,9 @@ public:
 
 	//! Stops the visual effect
 	virtual void stop();
+    
+    //! Continues the visual effect
+    virtual void follow();
 
     //! Finishes the visual effect
 	virtual void finish();
