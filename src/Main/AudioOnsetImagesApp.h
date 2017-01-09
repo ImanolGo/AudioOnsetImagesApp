@@ -20,6 +20,8 @@ class AudioOnsetImagesApp : public ofBaseApp{
     
         void drawScreen2(ofEventArgs & args);
     
+        void keyPressed2(ofKeyEventArgs &e);
+    
         void audioIn(float * input, int bufferSize, int nChannels);
     
 };

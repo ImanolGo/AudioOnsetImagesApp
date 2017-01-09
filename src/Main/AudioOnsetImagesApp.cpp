@@ -50,6 +50,35 @@ void AudioOnsetImagesApp::drawScreen2(ofEventArgs & args){
     //AppManager::getInstance().getImageManager().draw();
 }
 
+void AudioOnsetImagesApp::keyPressed2(ofKeyEventArgs &e){
+    int key = e.key;
+    
+    ofLogNotice() <<"KeyboardManager::keyPressed-> " + ofToString(key);
+    
+    
+    
+    if(key == ' ') {
+        AppManager::getInstance().toggleDebugMode();
+    }
+    
+    if(key == 'm') {
+        int note  = ofRandom(48, 122);
+        AppManager::getInstance().getMidiManager().sendNote(note, 127);
+    }
+    
+    
+    if(key == OF_KEY_RIGHT) {
+        AppManager::getInstance().getImageManager().nextImage();
+    }
+    
+    if(key == OF_KEY_LEFT) {
+        AppManager::getInstance().getImageManager().previousImage();
+    }
+
+}
+
+
+
 
 void AudioOnsetImagesApp::audioIn(float * input, int bufferSize, int nChannels)
 {

@@ -18,6 +18,7 @@ int main( ){
     
     shared_ptr<AudioOnsetImagesApp> mainApp(new AudioOnsetImagesApp);
     ofAddListener(secondWindow->events().draw,mainApp.get(),&AudioOnsetImagesApp::drawScreen2);
+    ofAddListener(secondWindow->events().keyPressed,mainApp.get(),&AudioOnsetImagesApp::keyPressed2);
     
     ofRunApp(mainWindow, mainApp);
     ofRunMainLoop();
