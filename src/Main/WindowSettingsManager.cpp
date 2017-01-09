@@ -59,13 +59,14 @@ void WindowSettingsManager::readSettings()
         ofGLFWWindowSettings settings;
         settings.height = CGDisplayPixelsHigh ( displays[displayID] );
         settings.width = CGDisplayPixelsWide ( displays[displayID] );
+        if(displayID == 1){
+            settings.decorated = false;
+        }
+        
         
         CGRect displayBounds= CGDisplayBounds (displays[displayID]);
         settings.setPosition(ofVec2f(displayBounds.origin.x, displayBounds.origin.y));
         
-        if(displayID>0){
-            settings.decorated = false;
-        }
         
         m_windows.push_back(settings);
         

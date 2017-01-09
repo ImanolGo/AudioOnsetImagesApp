@@ -96,6 +96,7 @@ class ImageManager: public Manager
         typedef                 vector<string>                  ImageNameVector;       ///< defines a vector of images names
         typedef                 map<int,ImageNameVector>        ImageNameVectorMap;    ///< defines a map of image name vector
         typedef                 vector<int>                     IndexVector;           ///< defines a vector of indexes
+       
     
         FolderNameVector        m_folderNames;          ///< folder names
         ImageNameVectorMap      m_imageNames;           ///< groups of image names

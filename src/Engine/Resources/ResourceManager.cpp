@@ -66,7 +66,7 @@ void ResourceManager::loadTextures()
     }
 }
 
-bool  ResourceManager::addTexture(string name, string path)
+bool ResourceManager::addTexture(string name, string path)
 {
     ofPtr<ofTexture> texture = ofPtr<ofTexture>(new ofTexture());
     

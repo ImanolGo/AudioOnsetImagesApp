@@ -62,7 +62,7 @@ void MidiManager::sendNote(int note, int velocity)
     
     if(velocity>0){
         // print out both the midi note and the frequency
-        ofLogNotice() << "MidiManager::sendNote->note: " << note << ", velocity: " << velocity << ", freq: " << ofxMidi::mtof(note) << " Hz";
+        //ofLogNotice() << "MidiManager::sendNote->note: " << note << ", velocity: " << velocity << ", freq: " << ofxMidi::mtof(note) << " Hz";
     }
 }
 

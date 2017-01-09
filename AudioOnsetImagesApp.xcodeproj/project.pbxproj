@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		0441B33DDF988BADE290E9AC /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 07E139D097B28730C911E814 /* README.md */; };
 		0466B9E6A55078A9F39B1B4B /* svgtiny_gradient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD4F639B12AA5C1013177E49 /* svgtiny_gradient.cpp */; };
+		0801FF951E1FAE9900EC8B92 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0801FF941E1FAE9900EC8B92 /* CoreMIDI.framework */; };
 		08028E778DF4FE57FB1EB693 /* WindowSettingsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1409637B4EAC9BC1E8D9AE71 /* WindowSettingsManager.cpp */; };
-		08E523E61C934889007D7AD1 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08E523E51C934889007D7AD1 /* CoreMIDI.framework */; };
 		0917441D3D94E4800C78CD8E /* ofxGuiMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 35759D6BF5E532389B70CD32 /* ofxGuiMatrix.cpp */; };
 		0AF1F1EF104F9E8C043B93AC /* PreviewManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5F8E4584C425FC821D5E7742 /* PreviewManager.cpp */; };
 		10071661D0AA59C4EC246B6C /* ofxGuiGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4A1CE60B1AC164DA8880771 /* ofxGuiGroup.cpp */; };
@@ -146,8 +146,8 @@
 		067A0CB3F8E32F33532D73DE /* ofxGui.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxGui.h; path = src/Addons/ofxGui/src/ofxGui.h; sourceTree = SOURCE_ROOT; };
 		074978820820325AB8737225 /* README.md */ = {isa = PBXFileReference; explicitFileType = file; fileEncoding = 30; name = README.md; path = src/Addons/ofxUnicode/README.md; sourceTree = SOURCE_ROOT; };
 		07E139D097B28730C911E814 /* README.md */ = {isa = PBXFileReference; explicitFileType = file; fileEncoding = 30; name = README.md; path = src/Addons/ofxGuiExtended/README.md; sourceTree = SOURCE_ROOT; };
+		0801FF941E1FAE9900EC8B92 /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/CoreMIDI.framework; sourceTree = DEVELOPER_DIR; };
 		08C5194B0C92DDA2A7539395 /* core.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = core.h; path = src/Addons/ofxUnicode/libs/utf8cpp/src/utf8_v2_3_1/source/utf8/core.h; sourceTree = SOURCE_ROOT; };
-		08E523E51C934889007D7AD1 /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = System/Library/Frameworks/CoreMIDI.framework; sourceTree = SDKROOT; };
 		09F8F2DF1D53E65319F30B96 /* LightManager.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = LightManager.cpp; path = src/Engine/3D/LightManager.cpp; sourceTree = SOURCE_ROOT; };
 		0ACA94EAF2C7DCA9EE906D69 /* svgtiny_internal.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = svgtiny_internal.h; path = src/Addons/ofxSvg/libs/svgTiny/src/svgtiny_internal.h; sourceTree = SOURCE_ROOT; };
 		0C1C0F60B9ED693828ED32A8 /* ofUnicode.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofUnicode.h; path = src/Addons/ofxUnicode/src/ofUnicode.h; sourceTree = SOURCE_ROOT; };
@@ -354,7 +354,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				08E523E61C934889007D7AD1 /* CoreMIDI.framework in Frameworks */,
+				0801FF951E1FAE9900EC8B92 /* CoreMIDI.framework in Frameworks */,
 				E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -368,6 +368,14 @@
 				47B837DB6F7B4DA45AC9E559 /* src */,
 			);
 			name = oscpack;
+			sourceTree = "<group>";
+		};
+		0801FF931E1FAE9900EC8B92 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0801FF941E1FAE9900EC8B92 /* CoreMIDI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		1646F71220FE0F0638559519 /* 3D */ = {
@@ -960,7 +968,6 @@
 		E4B69B4A0A3A1720003C02F2 = {
 			isa = PBXGroup;
 			children = (
-				08E523E51C934889007D7AD1 /* CoreMIDI.framework */,
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
 				E4EB6923138AFD0F00A09F29 /* Project.xcconfig */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
@@ -968,15 +975,16 @@
 				BB4B014C10F69532006C3DED /* addons */,
 				6948EE371B920CB800B5AC1A /* local_addons */,
 				E4B69B5B0A3A1756003C02F2 /* AudioOnsetImagesAppDebug.app */,
+				0801FF931E1FAE9900EC8B92 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				E2C62C2B4F591B9A20DAF22A /* Engine */,
 				AD642137CCDF61FB3E6CCEA2 /* Addons */,
 				64C01E134D4F5DD352282D3F /* Communication */,
+				E2C62C2B4F591B9A20DAF22A /* Engine */,
 				375D8B140B52B55EB32EB487 /* Layout */,
 				AF4FDCF7E02C59FCC5FE54A2 /* Main */,
 				4B40D8E93F6785C684B587FE /* Sound */,
@@ -1254,12 +1262,9 @@
 					src/Addons/ofxMidi/scripts,
 					src/Addons/ofxMidi/src,
 					src/Addons/ofxMidi/src/desktop,
-					src/Addons/ofxNetwork/docs,
-					src/Addons/ofxNetwork/src,
 					src/Addons/ofxOsc,
 					src/Addons/ofxOsc/libs/oscpack/src/ip,
 					src/Addons/ofxOsc/libs/oscpack/src/ip/posix,
-					src/Addons/ofxOsc/libs/oscpack/src/ip/win32,
 					src/Addons/ofxOsc/libs/oscpack/src/osc,
 					src/Addons/ofxOsc/src,
 					src/Addons/ofxSvg/libs/svgTiny/src,
@@ -1325,12 +1330,9 @@
 					src/Addons/ofxMidi/scripts,
 					src/Addons/ofxMidi/src,
 					src/Addons/ofxMidi/src/desktop,
-					src/Addons/ofxNetwork/docs,
-					src/Addons/ofxNetwork/src,
 					src/Addons/ofxOsc,
 					src/Addons/ofxOsc/libs/oscpack/src/ip,
 					src/Addons/ofxOsc/libs/oscpack/src/ip/posix,
-					src/Addons/ofxOsc/libs/oscpack/src/ip/win32,
 					src/Addons/ofxOsc/libs/oscpack/src/osc,
 					src/Addons/ofxOsc/src,
 					src/Addons/ofxSvg/libs/svgTiny/src,
@@ -1389,12 +1391,9 @@
 					src/Addons/ofxMidi/scripts,
 					src/Addons/ofxMidi/src,
 					src/Addons/ofxMidi/src/desktop,
-					src/Addons/ofxNetwork/docs,
-					src/Addons/ofxNetwork/src,
 					src/Addons/ofxOsc,
-					src/Addons/ofxOsc/libs/oscpack/src/ip,
+					src/Addons/ofxOsc/libs/oscpack/src,
 					src/Addons/ofxOsc/libs/oscpack/src/ip/posix,
-					src/Addons/ofxOsc/libs/oscpack/src/ip/win32,
 					src/Addons/ofxOsc/libs/oscpack/src/osc,
 					src/Addons/ofxOsc/src,
 					src/Addons/ofxSvg/libs/svgTiny/src,
@@ -1415,7 +1414,6 @@
 					src/Main,
 					src/Sound,
 					src/Visuals,
-					src/Addons/ofxOsc/libs/oscpack/src,
 				);
 				ICON = "$(ICON_NAME_DEBUG)";
 				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
@@ -1423,6 +1421,7 @@
 				INSTALL_PATH = /Applications;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)Debug";
+				SDKROOT = macosx10.11;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1454,12 +1453,9 @@
 					src/Addons/ofxMidi/scripts,
 					src/Addons/ofxMidi/src,
 					src/Addons/ofxMidi/src/desktop,
-					src/Addons/ofxNetwork/docs,
-					src/Addons/ofxNetwork/src,
 					src/Addons/ofxOsc,
-					src/Addons/ofxOsc/libs/oscpack/src/ip,
+					src/Addons/ofxOsc/libs/oscpack/src,
 					src/Addons/ofxOsc/libs/oscpack/src/ip/posix,
-					src/Addons/ofxOsc/libs/oscpack/src/ip/win32,
 					src/Addons/ofxOsc/libs/oscpack/src/osc,
 					src/Addons/ofxOsc/src,
 					src/Addons/ofxSvg/libs/svgTiny/src,
@@ -1480,7 +1476,6 @@
 					src/Main,
 					src/Sound,
 					src/Visuals,
-					src/Addons/ofxOsc/libs/oscpack/src,
 				);
 				ICON = "$(ICON_NAME_RELEASE)";
 				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
@@ -1488,6 +1483,7 @@
 				INSTALL_PATH = /Applications;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx10.11;
 				WRAPPER_EXTENSION = app;
 				baseConfigurationReference = E4EB6923138AFD0F00A09F29;
 			};

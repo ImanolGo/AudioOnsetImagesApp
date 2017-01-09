@@ -118,8 +118,13 @@ void ImageManager::setImageGroup(int index)
         m_currentImageNames = m_imageNames[index];
         m_indexes.empty();
         m_currentIndex = 0;
-        //this->nextImage();
+        this->loadNextImage();
+        AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_currentImage);
+        m_currentImage->setAlpha(0);
+        ofLogNotice()<< "ImageManager::set image group-> group : " << index;
     }
+    
+
 }
 
 void ImageManager::nextImage()

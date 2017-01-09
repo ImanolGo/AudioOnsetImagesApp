@@ -45,9 +45,13 @@ public:
     //! Draw the gui
     void draw();
     
-    void saveGuiValues();
+    void saveAllPresets();
     
-    void loadGuiValues();
+    void saveCurrentPreset();
+    
+    void saveTempPreset();
+    
+    void loadTempPreset();
     
     void toggleGui();
     
@@ -87,6 +91,8 @@ public:
     
     void setNote(const ofVec2f& value);
     
+    void setPreset(int value);
+    
 private:
     
     void setupGuiParameters();
@@ -100,6 +106,8 @@ private:
     void drawRectangle();
     
     void updatePresets();
+    
+    void deleteTempPresets();
 
 private:
     
@@ -107,6 +115,9 @@ private:
     ofxPanel			m_gui;
     
     ofParameter<float>	m_guiFPS;
+    
+    ofxButton           m_saveCurrentPreset;
+    ofxButton           m_saveAllPresets;
     
     
     ofParameterGroup    m_parametersImage;

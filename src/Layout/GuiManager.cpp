@@ -28,7 +28,7 @@ GuiManager::GuiManager(): Manager(), m_showGui(true), m_currentPreset(-1)
 
 GuiManager::~GuiManager()
 {
-    this->saveGuiValues();
+    this->deleteTempPresets();
     ofLogNotice() <<"GuiManager::Destructor";
 }
 
@@ -45,7 +45,7 @@ void GuiManager::setup()
     this->setupImageGui();
     this->setupAudioGui();
     this->setupPresets();
-    this->loadGuiValues();
+    this->loadTempPreset();
 
     ofLogNotice() <<"GuiManager::initialized";
 
@@ -58,6 +58,15 @@ void GuiManager::setupGuiParameters()
     m_gui.setPosition(MARGIN, MARGIN);
     //m_gui.setPosition(20, 20);
     m_gui.add(m_guiFPS.set("FPS", 0, 0, 60));
+    
+
+    m_saveAllPresets.addListener(this, &GuiManager::saveAllPresets);
+    m_gui.add(m_saveAllPresets.setup("Save All Presets"));
+    
+    m_saveCurrentPreset.addListener(this, &GuiManager::saveCurrentPreset);
+    m_gui.add(m_saveCurrentPreset.setup("Save Current Preset"));
+
+    
     ofxGuiSetFont( "fonts/open-sans/OpenSans-Semibold.ttf", 11 );
 }
 
@@ -161,6 +170,8 @@ void GuiManager::setupAudioGui()
 
 void GuiManager::setupPresets()
 {
+    this->deleteTempPresets();
+    
     auto foldersVector = AppManager::getInstance().getImageManager().getFoldersNames();
     
     for(auto folder: foldersVector)
@@ -188,10 +199,10 @@ void GuiManager::update()
 void GuiManager::updatePresets()
 {
     if(m_currentPreset != m_matrixPresets.getActiveToggleIndex()){
-        this->saveGuiValues();
+        this->saveTempPreset();
         m_currentPreset = m_matrixPresets.getActiveToggleIndex();
         ofLogNotice() <<"GuiManager::updatePresetGroup -> Current Preset: " << m_currentPreset;
-        this->loadGuiValues();
+        this->loadTempPreset();
         AppManager::getInstance().getImageManager().setImageGroup(m_currentPreset);
         m_matrixPresets.setActiveToggle(m_currentPreset);
         
@@ -210,28 +221,81 @@ void GuiManager::draw()
 }
 
 
-void GuiManager::saveGuiValues()
+void GuiManager::saveTempPreset()
 {
     //m_gui.saveToFile(GUI_SETTINGS_FILE_NAME);
     
+    auto foldersVector = AppManager::getInstance().getImageManager().getFoldersNames();
+
     if(m_currentPreset>=0){
-        string presetFileName = "xmls/GuiSettings_" + ofToString(m_currentPreset) + ".xml";
+        string presetFileName = "xmls/GuiSettings_" + foldersVector[m_currentPreset] + "_temp.xml";
         m_gui.saveToFile(presetFileName);
     }
     
 }
 
-void GuiManager::loadGuiValues()
+void GuiManager::loadTempPreset()
 {
     //m_gui.loadFromFile(GUI_SETTINGS_FILE_NAME);
     
-    if(m_currentPreset>=0){
-        string presetFileName = "xmls/GuiSettings_" + ofToString(m_currentPreset) + ".xml";
+    auto foldersVector = AppManager::getInstance().getImageManager().getFoldersNames();
+    
+    if(m_currentPreset>=0 && foldersVector.size()>m_currentPreset){
+        //Try permanent preset
+        string presetFileName = "xmls/GuiSettings_" + foldersVector[m_currentPreset] + ".xml";
         m_gui.loadFromFile(presetFileName);
+        
+        //Try temporal preset
+        string temporalPresetFileName  = "xmls/GuiSettings_" + foldersVector[m_currentPreset] + "_temp.xml";
+        m_gui.loadFromFile(temporalPresetFileName);
     }
-   
+}
+
+
+void GuiManager::deleteTempPresets()
+{
+    auto foldersVector = AppManager::getInstance().getImageManager().getFoldersNames();
+    
+    for(auto folder: foldersVector){
+        string temporalPresetFileName  = "xmls/GuiSettings_" + folder + "_temp.xml";
+        ofFile file(ofToDataPath(temporalPresetFileName));
+        file.remove();
+    }
     
 }
+
+
+void GuiManager::saveAllPresets()
+{
+    auto foldersVector = AppManager::getInstance().getImageManager().getFoldersNames();
+    
+    for(auto folder: foldersVector){
+        string temporalPresetFileName  = "xmls/GuiSettings_" + folder + "_temp.xml";
+        ofFile file(ofToDataPath(temporalPresetFileName));
+        string permanentPresetFileName  = "xmls/GuiSettings_" + folder + ".xml";
+        file.moveTo(permanentPresetFileName, true, true);
+    }
+    
+}
+
+void GuiManager::saveCurrentPreset()
+{
+    auto foldersVector = AppManager::getInstance().getImageManager().getFoldersNames();
+    
+    if(m_currentPreset>=0){
+        
+        string temporalPresetFileName = "xmls/GuiSettings_" + foldersVector[m_currentPreset] + "_temp.xml";
+        
+        ofFile file(ofToDataPath(temporalPresetFileName));
+       
+        
+        string permanentPresetFileName = "xmls/GuiSettings_" + foldersVector[m_currentPreset] + ".xml";
+        
+        file.moveTo(permanentPresetFileName, true, true);
+    }
+    
+}
+
 
 
 void GuiManager::toggleGui()
@@ -305,5 +369,15 @@ void GuiManager::setNote(const ofVec2f& value)
     m_notes_params.at(index) = isOn;
 }
 
+
+ void GuiManager::setPreset(int value)
+{
+    if(value < 0 || value >= m_presetParameters.size()){
+        return;
+    }
+    
+    m_matrixPresets.setActiveToggle(value);
+
+}
 
 

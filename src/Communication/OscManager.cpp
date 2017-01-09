@@ -91,13 +91,18 @@ void OscManager::update()
         else if(m.getAddress() == "/NextImage")
         {
             int value = m.getArgAsInt(0);
-            AppManager::getInstance().getImageManager().nextImage();
+            if(value){
+                AppManager::getInstance().getImageManager().nextImage();
+            }
+           
         }
         
         else if(m.getAddress() == "/PreviousImage")
         {
             int value = m.getArgAsInt(0);
-            AppManager::getInstance().getImageManager().previousImage();
+            if(value){
+                AppManager::getInstance().getImageManager().previousImage();
+            }
         }
 
         
@@ -145,11 +150,20 @@ void OscManager::update()
             AppManager::getInstance().getGuiManager().setNote(value);
         }
         
+        else if(m.getAddress() == "/SetPreset")
+        {
+            int value = m.getArgAsInt(0);
+            AppManager::getInstance().getGuiManager().setPreset(value-1);
+        }
+        
         else
         {
             string message = this->getMessageAsString(m);
             ofLogNotice() <<"OscManager::update -> received:  " << message;
         }
+        
+        string message = this->getMessageAsString(m);
+        ofLogNotice() <<"OscManager::update -> received:  " << message;
 
     }
 }
