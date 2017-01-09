@@ -127,6 +127,15 @@ void GuiManager::setupAudioGui()
 
     m_parametersAudio.setName("Audio");
     
+    
+    m_lowFreqCut.set("Low Freq Cut", 0, 0, 511);
+    m_lowFreqCut.addListener(audioManager, &AudioManager::onChangeLowFreqCut);
+    m_parametersAudio.add(m_lowFreqCut);
+    
+    m_highFreqCut.set("High Freq Cut", 511, 0, 511);
+    m_highFreqCut.addListener(audioManager, &AudioManager::onChangeHighFreqCut);
+    m_parametersAudio.add(m_highFreqCut);
+    
     m_threshold.set("Threshold", 0.1, 0.0, 1.0);
     m_threshold.addListener(audioManager, &AudioManager::onChangeThreshold);
     m_parametersAudio.add(m_threshold);
@@ -267,6 +276,8 @@ void GuiManager::deleteTempPresets()
 
 void GuiManager::saveAllPresets()
 {
+    this->saveTempPreset();
+
     auto foldersVector = AppManager::getInstance().getImageManager().getFoldersNames();
     
     for(auto folder: foldersVector){
@@ -280,6 +291,8 @@ void GuiManager::saveAllPresets()
 
 void GuiManager::saveCurrentPreset()
 {
+    this->saveTempPreset();
+    
     auto foldersVector = AppManager::getInstance().getImageManager().getFoldersNames();
     
     if(m_currentPreset>=0){

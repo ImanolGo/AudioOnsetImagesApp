@@ -11,7 +11,7 @@
 #include "AudioManager.h"
 
 
-AudioManager::AudioManager(): m_volume(0.5), m_threshold(2.0), m_minimumThreshold(0.0), m_decayRate(0.1), m_decayTime(0.5), m_maxThreshold(1.0)
+AudioManager::AudioManager(): m_volume(0.5), m_threshold(2.0), m_minimumThreshold(0.0), m_decayRate(0.1), m_decayTime(0.5), m_maxThreshold(1.0), m_lowFreqCut(0), m_highFreqCut(511)
 {
     //Intentionaly left empty
 }
@@ -111,8 +111,13 @@ void AudioManager::updateOnsetDetector()
     m_threshold = m_animationVisual->getValue();
     m_fftLive.setThreshold(m_threshold);
     
-     if(m_fftLive.getAveragePeak() > m_threshold)
+    // if(m_fftLive.getAveragePeak() > m_threshold)
+    
+    float peak = this->getFilteredAveragePeak();
+    if(peak > m_threshold)
      {
+        ofLogNotice() <<"AudioManager::setupMidiNotes -> AvgPeak " << peak << ", threshold = " << m_threshold;
+         
         AppManager::getInstance().getImageManager().nextImage();
         m_threshold = m_maxThreshold;
         this->setAnimations();
@@ -124,6 +129,7 @@ void AudioManager::updateOnsetDetector()
 void AudioManager::draw()
 {
     this->drawFFT();
+    this->drawFFTFilter();
 }
 
 void AudioManager::drawFFT()
@@ -132,8 +138,30 @@ void AudioManager::drawFFT()
     float xOffset = GuiManager::GUI_WIDTH + 2*GuiManager::MARGIN;
     float yOffset = GuiManager::MARGIN + m_rect->getPosition().y + m_rect->getHeight();
     
-    m_fftLive.draw(xOffset, yOffset);
+    
+    m_fftLive.draw(xOffset, yOffset, OFX_FFT_WIDTH, OFX_FFT_HEIGHT);
 
+}
+
+void AudioManager::drawFFTFilter()
+{
+    
+    float xOffset = GuiManager::GUI_WIDTH + 2*GuiManager::MARGIN;
+    float yOffset = GuiManager::MARGIN + m_rect->getPosition().y + m_rect->getHeight();
+    
+    
+    float x  = xOffset + m_lowFreqCut + 1;
+    float w  = m_highFreqCut - m_lowFreqCut;
+    float y = yOffset+1;
+    float h = OFX_FFT_HEIGHT;
+    
+    ofPushStyle();
+    ofEnableAlphaBlending();
+    ofSetColor(200,0,0,50);
+    ofDrawRectangle(x, y, w, h);
+    ofEnableAlphaBlending();
+    ofPopStyle();
+    
 }
 
 void AudioManager::setAnimations()
@@ -185,7 +213,18 @@ void AudioManager::onChangeDecayTime(float& value)
     m_decayTime = value;
 }
 
+void AudioManager::onChangeLowFreqCut(int& value)
+{
+    if(value<m_highFreqCut && value < m_fftLive.getBufferSize()){
+        m_lowFreqCut = value;
+    }
+}
 
+void AudioManager::onChangeHighFreqCut(int& value){
+    if(value>m_lowFreqCut && value < m_fftLive.getBufferSize()){
+        m_highFreqCut = value;
+    }
+}
 
 
 float AudioManager::getAudioMax()
@@ -197,5 +236,36 @@ float AudioManager::getAudioMax()
 void AudioManager::audioIn(float * input, int bufferSize, int nChannels)
 {
     m_fftLive.audioIn(input, bufferSize, nChannels);
+}
+
+float AudioManager::getFilteredAveragePeak()
+{
+    
+    float avrPeak = 0;
+    //vector<float> peakData = m_fftLive.getFftPeakData();
+    vector<float> peakData = m_fftLive.getFftRawData();
+    
+    
+    
+    for(int i=m_lowFreqCut; i<= m_highFreqCut; i++)
+    {
+        if(peakData[i]>0 && peakData[i]<=1){
+            avrPeak+=peakData[i];
+        }
+        
+    }
+    
+    
+    int numPeaks = m_highFreqCut - m_lowFreqCut;
+    
+    ofLogNotice() <<"AudioManager::setupMidiNotes -> SumPeaks " <<avrPeak << ", w = " << m_fftLive.getBufferSize();
+    
+    //avrPeak/=numPeaks;
+    //avrPeak = ofClamp(avrPeak, 0.0, 1.0);
+    
+    avrPeak = ofMap(avrPeak, 0.0, numPeaks, 0.01, 1.0, true);
+    
+    return avrPeak;
+    
 }
 

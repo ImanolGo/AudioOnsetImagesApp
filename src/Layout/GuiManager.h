@@ -137,6 +137,8 @@ private:
     ofParameter<bool>     m_noFade;
     ofParameter<bool>     m_stop;
     
+    ofParameter<int>            m_lowFreqCut;
+    ofParameter<int>            m_highFreqCut;
     ofParameter<float>          m_threshold;
     ofParameter<float>          m_decayTime;
     ofParameter<int>            m_midiChannel;

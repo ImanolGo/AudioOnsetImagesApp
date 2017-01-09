@@ -53,6 +53,10 @@ public:
     
     void onChangeDecayTime(float& value);
     
+    void onChangeLowFreqCut(int& value);
+    
+    void onChangeHighFreqCut(int& value);
+    
     void audioIn(float * input, int bufferSize, int nChannels);
     
 
@@ -66,6 +70,8 @@ private:
 
     void drawFFT();
     
+    void drawFFTFilter();
+    
     void drawRMS();
     
     void updateOnsetDetector();
@@ -75,6 +81,8 @@ private:
     void sendAllNotesOff();
     
     void sendMidiNotesOn();
+    
+    float getFilteredAveragePeak();
     
 private:
     
@@ -89,11 +97,15 @@ private:
     float           m_maxThreshold;
     float           m_decayRate;
     float           m_decayTime;
+    int             m_lowFreqCut;
+    int             m_highFreqCut;
     
     
     ofPtr<RectangleVisual>  m_rect;
     ofPtr<TextVisual>       m_text;
     ofPtr<BasicVisual>      m_animationVisual;
     MidiNoteVector          m_notes;
+    
+    
 
 };
