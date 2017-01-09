@@ -11,7 +11,7 @@
 #include "AudioManager.h"
 
 
-AudioManager::AudioManager(): m_volume(0.5), m_threshold(2.0), m_minimumThreshold(0.0), m_decayRate(0.1), m_decayTime(0.5), m_maxThreshold(1.0), m_lowFreqCut(0), m_highFreqCut(511)
+AudioManager::AudioManager(): m_volume(0.5), m_threshold(2.0), m_minimumThreshold(0.0), m_decayRate(0.1), m_decayTime(0.5), m_maxThreshold(1.0), m_lowFreqCut(0), m_highFreqCut(511), m_stopped(false)
 {
     //Intentionaly left empty
 }
@@ -69,7 +69,9 @@ void AudioManager::setupText()
     ofVec3f position;
     
     position.x = GuiManager::GUI_WIDTH + 2.5*GuiManager::MARGIN;
-    position.y = 1.5*GuiManager::MARGIN + windowSettings[0].height*0.5;
+    float yOffset = AppManager::getInstance().getPreviewManager().getPreviewRect()->getPosition().y + AppManager::getInstance().getPreviewManager().getPreviewRect()->getHeight();
+    position.y = 1.5*GuiManager::MARGIN + yOffset;
+    
     
     int width = 700;
     int fontSize = 12;
@@ -97,6 +99,10 @@ void AudioManager::setupText()
 
 void AudioManager::update()
 {
+    if(m_stopped){
+        return;
+    }
+    
     //ofLogNotice() <<"AudioManager::update" ;
     m_fftLive.update();
     this->updateOnsetDetector();
@@ -116,7 +122,7 @@ void AudioManager::updateOnsetDetector()
     float peak = this->getFilteredAveragePeak();
     if(peak > m_threshold)
      {
-        ofLogNotice() <<"AudioManager::setupMidiNotes -> AvgPeak " << peak << ", threshold = " << m_threshold;
+        //ofLogNotice() <<"AudioManager::setupMidiNotes -> AvgPeak " << peak << ", threshold = " << m_threshold;
          
         AppManager::getInstance().getImageManager().nextImage();
         m_threshold = m_maxThreshold;
@@ -258,7 +264,7 @@ float AudioManager::getFilteredAveragePeak()
     
     int numPeaks = m_highFreqCut - m_lowFreqCut;
     
-    ofLogNotice() <<"AudioManager::setupMidiNotes -> SumPeaks " <<avrPeak << ", w = " << m_fftLive.getBufferSize();
+   // ofLogNotice() <<"AudioManager::setupMidiNotes -> SumPeaks " <<avrPeak << ", w = " << m_fftLive.getBufferSize();
     
     //avrPeak/=numPeaks;
     //avrPeak = ofClamp(avrPeak, 0.0, 1.0);
@@ -267,5 +273,10 @@ float AudioManager::getFilteredAveragePeak()
     
     return avrPeak;
     
+}
+
+void AudioManager::stop(bool value)
+{
+    m_stopped = value;
 }
 

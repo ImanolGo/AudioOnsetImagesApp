@@ -321,7 +321,7 @@ void ImageManager::onChangeNoFade(bool& value)
     m_noFade = value;
 }
 
-void ImageManager::onChangeStop(bool &value)
+void ImageManager::stop(bool value)
 {
     m_stop = value;
     

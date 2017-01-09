@@ -124,6 +124,18 @@ void PreviewManager::setupRectangles()
 
 }
 
+ofPtr<RectangleVisual> PreviewManager::getPreviewRect() const
+{
+    ofPtr<RectangleVisual> rect =  ofPtr<RectangleVisual>(new RectangleVisual());
+    string key = "IMAGES";
+    
+    if(m_rectangles.find(key)!=m_rectangles.end()){
+        rect = m_rectangles.at(key);
+    }
+        
+    return rect;
+}
+
 void PreviewManager::draw()
 {
     this->drawPreview1();

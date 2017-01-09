@@ -27,8 +27,8 @@ class GuiManager: public Manager
     
 public:
     
-    static const int GUI_WIDTH;
-    static const int MARGIN;
+    static const float GUI_WIDTH;
+    static const float MARGIN;
 
     //! Constructor
     GuiManager();
@@ -118,6 +118,8 @@ private:
     
     ofxButton           m_saveCurrentPreset;
     ofxButton           m_saveAllPresets;
+    ofParameter<bool>   m_stop;
+    ofParameter<bool>   m_pause;
     
     
     ofParameterGroup    m_parametersImage;
@@ -135,7 +137,7 @@ private:
     ofParameter<bool>     m_randomImages;
     ofParameter<bool>     m_randomFadeTime;
     ofParameter<bool>     m_noFade;
-    ofParameter<bool>     m_stop;
+   
     
     ofParameter<int>            m_lowFreqCut;
     ofParameter<int>            m_highFreqCut;
@@ -150,6 +152,9 @@ private:
     int m_currentPreset;
    
     bool        m_showGui;  //It defines the whether the gui should be shown or not
+    
+    vector<ofColor>         m_colors;
+    int                     m_switchColor;
 };
 
 //==========================================================================

@@ -90,6 +90,10 @@ public:
     void toggleDebugMode();
 
     void setDebugMode(bool showDebug);
+    
+    void onChangeStop(bool& value);
+    
+    void onChangePause(bool& value);
 
 
 private:

@@ -15,10 +15,12 @@
 
   </textures>
 
-  <colors>
-
-	<color name="CenterBackgroundColor" r="85" g="78" b="68" a="255"/>
-	<color name="EdgeBackgroundColor" r="30" g="30" b="30" a="255"/>
+   <colors>
+    
+      <color  name="GUI_Background" r="0" g="0" b="0" a="127"/>
+      <color  name="GUI_Fill" r="160" g="160" b="160" a="160"/>
+      <color  name="GUI1" r="160" g="160" b="80" a="200"/>
+      <color  name="GUI2" r="80" g="160" b="160" a="200"/>
 
   </colors>
 

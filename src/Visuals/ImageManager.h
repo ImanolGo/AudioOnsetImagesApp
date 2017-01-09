@@ -58,11 +58,11 @@ class ImageManager: public Manager
     
         void onChangeNoFade(bool& value);
     
-        void onChangeStop(bool& value);
-    
         void setImageGroup(int index);
     
         const vector<string>& getFoldersNames() {return m_folderNames;}
+    
+        void stop(bool value);
     
 
     private:

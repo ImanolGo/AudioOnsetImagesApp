@@ -59,6 +59,8 @@ public:
     
     void audioIn(float * input, int bufferSize, int nChannels);
     
+    void stop(bool value);
+    
 
 private:
 
@@ -105,6 +107,8 @@ private:
     ofPtr<TextVisual>       m_text;
     ofPtr<BasicVisual>      m_animationVisual;
     MidiNoteVector          m_notes;
+    
+    bool                    m_stopped;
     
     
 

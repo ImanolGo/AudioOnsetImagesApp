@@ -16,11 +16,11 @@
 
 const string GuiManager::GUI_SETTINGS_FILE_NAME = "xmls/GuiSettings.xml";
 const string GuiManager::GUI_SETTINGS_NAME = "GUI";
-const int GuiManager::GUI_WIDTH = 350;
-const int GuiManager::MARGIN = 40;
+const float GuiManager::GUI_WIDTH = 350;
+const float GuiManager::MARGIN = 40;
 
 
-GuiManager::GuiManager(): Manager(), m_showGui(true), m_currentPreset(-1)
+GuiManager::GuiManager(): Manager(), m_showGui(true), m_currentPreset(-1), m_switchColor(0)
 {
 	//Intentionally left empty
 }
@@ -53,6 +53,19 @@ void GuiManager::setup()
 
 void GuiManager::setupGuiParameters()
 {
+    auto appManager = &AppManager::getInstance();
+    
+    ofColor backgroundColor = AppManager::getInstance().getSettingsManager().getColor("GUI_Background");
+    ofColor fillColor = AppManager::getInstance().getSettingsManager().getColor("GUI_Fill");
+    m_gui.setDefaultBackgroundColor(backgroundColor);
+    m_gui.setDefaultFillColor(fillColor);
+    m_colors.push_back(AppManager::getInstance().getSettingsManager().getColor("GUI1"));
+    m_colors.push_back(AppManager::getInstance().getSettingsManager().getColor("GUI2"));
+    
+    m_gui.setDefaultHeaderBackgroundColor(m_colors[m_switchColor]);
+    m_gui.setDefaultFillColor(m_colors[m_switchColor]);
+    m_switchColor = 1 - m_switchColor;
+    
     m_gui.setDefaultWidth(GUI_WIDTH);
     m_gui.setup(GUI_SETTINGS_NAME, GUI_SETTINGS_FILE_NAME);
     m_gui.setPosition(MARGIN, MARGIN);
@@ -65,7 +78,14 @@ void GuiManager::setupGuiParameters()
     
     m_saveCurrentPreset.addListener(this, &GuiManager::saveCurrentPreset);
     m_gui.add(m_saveCurrentPreset.setup("Save Current Preset"));
-
+    
+    m_stop.set("Stop", false);
+    m_stop.addListener(appManager, &AppManager::onChangeStop);
+    m_gui.add(m_stop);
+    
+    m_pause.set("Pause", false);
+    m_pause.addListener(appManager, &AppManager::onChangePause);
+    m_gui.add(m_pause);
     
     ofxGuiSetFont( "fonts/open-sans/OpenSans-Semibold.ttf", 11 );
 }
@@ -74,6 +94,10 @@ void GuiManager::setupGuiParameters()
 
 void GuiManager::setupImageGui()
 {
+    m_gui.setDefaultHeaderBackgroundColor(m_colors[m_switchColor]);
+    m_gui.setDefaultFillColor(m_colors[m_switchColor]);
+    m_switchColor = 1 - m_switchColor;
+    
     auto imageManager = &AppManager::getInstance().getImageManager();
 
     m_parametersImage.setName("Images");
@@ -89,11 +113,6 @@ void GuiManager::setupImageGui()
     m_fadeTimeMax.set("Fade Time Max", 5, 0.1, 30.0);
     m_fadeTimeMax.addListener(imageManager, &ImageManager::onChangeMaxFadeTime);
     m_parametersImage.add(m_fadeTimeMax);
-    
-    m_stop.set("Stop", false);
-    m_stop.addListener(imageManager, &ImageManager::onChangeStop);
-    m_parametersImage.add(m_stop);
-    
     
     m_noFade.set("No fading", false);
     m_noFade.addListener(imageManager, &ImageManager::onChangeNoFade);
@@ -123,6 +142,10 @@ void GuiManager::setupImageGui()
 
 void GuiManager::setupAudioGui()
 {
+    m_gui.setDefaultHeaderBackgroundColor(m_colors[m_switchColor]);
+    m_gui.setDefaultFillColor(m_colors[m_switchColor]);
+    m_switchColor = 1 - m_switchColor;
+    
     auto audioManager = &AppManager::getInstance().getAudioManager();
 
     m_parametersAudio.setName("Audio");
@@ -179,6 +202,10 @@ void GuiManager::setupAudioGui()
 
 void GuiManager::setupPresets()
 {
+    m_gui.setDefaultHeaderBackgroundColor(m_colors[m_switchColor]);
+    m_gui.setDefaultFillColor(m_colors[m_switchColor]);
+    m_switchColor = 1 - m_switchColor;
+    
     this->deleteTempPresets();
     
     auto foldersVector = AppManager::getInstance().getImageManager().getFoldersNames();

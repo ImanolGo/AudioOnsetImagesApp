@@ -43,6 +43,8 @@ public:
 
     //! End fbo for a specific window
     void end(int windowIndex);
+    
+    ofPtr<RectangleVisual> getPreviewRect() const;
 
 
 private:

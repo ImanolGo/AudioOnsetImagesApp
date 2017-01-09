@@ -68,9 +68,9 @@ void AppManager::setupManagers()
     m_viewManager.setup();
     m_visualEffectsManager.setup();
     m_oscManager.setup();
+    m_previewManager.setup();
     m_imageManager.setup();
     m_audioManager.setup();
-    m_previewManager.setup();
     m_midiManager.setup();
     m_guiManager.setup();
    
@@ -119,6 +119,18 @@ void AppManager::setDebugMode(bool showDebug)
         ofSetLogLevel(OF_LOG_NOTICE);
     }
     
+}
+
+
+
+void AppManager::onChangeStop(bool& value)
+{
+    m_imageManager.stop(value);
+    m_audioManager.stop(value);
+}
+
+void AppManager::onChangePause(bool& value)
+{
     
 }
 
