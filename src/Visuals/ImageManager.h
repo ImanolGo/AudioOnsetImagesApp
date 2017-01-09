@@ -11,6 +11,7 @@
 
 #include "Manager.h"
 #include "ImageVisual.h"
+#include "RectangleVisual.h"
 #include "WindowSettingsManager.h"
 
 
@@ -58,6 +59,8 @@ class ImageManager: public Manager
     
         void onChangeNoFade(bool& value);
     
+        void onChangeBrightness(int& value);
+    
         void setImageGroup(int index);
     
         const vector<string>& getFoldersNames() {return m_folderNames;}
@@ -70,6 +73,8 @@ class ImageManager: public Manager
     private:
 
         void loadImages();
+    
+        void setupRectangle();
     
         bool loadSubfolder(ofDirectory& dir, int index);
     
@@ -115,5 +120,6 @@ class ImageManager: public Manager
         bool                    m_stop;             ///< defines if the images will be shown or not
     
         ofPtr<ImageVisual>      m_currentImage;  ///< current image to be displayed
+        ofPtr<RectangleVisual>  m_darknessRect;  ///< darkness rectangle
 
 };

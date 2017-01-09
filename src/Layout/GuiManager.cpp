@@ -102,6 +102,10 @@ void GuiManager::setupImageGui()
 
     m_parametersImage.setName("Images");
     
+    m_brightness.set("Brightness", 255, 0, 255);
+    m_brightness.addListener(imageManager, &ImageManager::onChangeBrightness);
+    m_parametersImage.add(m_brightness);
+    
     m_fadeTime.set("Fade Time", 2.0, 0.1, 30.0);
     m_fadeTime.addListener(imageManager, &ImageManager::onChangeFadeTime);
     m_parametersImage.add(m_fadeTime);

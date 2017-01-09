@@ -40,6 +40,7 @@ void ImageManager::setup()
 
     m_currentImage =  ofPtr<ImageVisual>(new ImageVisual());
 
+    this->setupRectangle();
     this->loadImages();
     this->setImageGroup(0);
     this->loadNextImage();
@@ -49,7 +50,17 @@ void ImageManager::setup()
 
 }
 
-
+void ImageManager::setupRectangle()
+{
+    WindowSettingsManager::WindowSettingsVector windowSettings = WindowSettingsManager::getInstance().getWindowsSettings();
+    
+    float width = windowSettings[1].width;
+    float height = windowSettings[1].height;
+  
+    m_darknessRect =  ofPtr<RectangleVisual> (new RectangleVisual(ofPoint(0,0,0), width, height));
+    m_darknessRect->setColor(ofColor::black);
+    m_darknessRect->setAlpha(0.0);
+}
 
 void ImageManager::loadImages()
 {
@@ -274,11 +285,13 @@ void ImageManager::update()
 
 void ImageManager::draw()
 {
+    
     ofClear(0);
     if(m_currentImage){
         m_currentImage->draw();
     }
-
+    
+    m_darknessRect->draw();
 }
 
 
@@ -340,5 +353,11 @@ void ImageManager::pause(bool value)
         AppManager::getInstance().getVisualEffectsManager().continueAllVisualEffects(m_currentImage);
     }
     
+}
+
+void ImageManager::onChangeBrightness(int& value)
+{
+    int alpha = ofMap(value,0,255,255,0, true);
+    m_darknessRect->setAlpha(alpha);
 }
 
