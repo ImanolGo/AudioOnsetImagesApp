@@ -60,7 +60,7 @@ void PreviewManager::setupText()
 {
     ofVec3f position;
 
-    position.x = GuiManager::GUI_WIDTH + 2.5*GuiManager::MARGIN;
+    position.x = GuiManager::GUI_WIDTH + 4*GuiManager::MARGIN;
     position.y = 1.5*GuiManager::MARGIN;
 
     int width = 700;
@@ -98,7 +98,7 @@ void PreviewManager::setupRectangles()
         WindowSettingsManager::WindowSettingsVector windowSettings = WindowSettingsManager::getInstance().getWindowsSettings();
 
         position.y = 3*GuiManager::MARGIN;
-        position.x = 2*GuiManager::MARGIN + GuiManager::GUI_WIDTH;
+        position.x = 3.5*GuiManager::MARGIN + GuiManager::GUI_WIDTH;
 
         if(m_fbos[indexWindow]->getWidth()> m_fbos[indexWindow]->getHeight()){
             width = (windowSettings[0].width - 4*GuiManager::MARGIN - GuiManager::GUI_WIDTH)*0.5;

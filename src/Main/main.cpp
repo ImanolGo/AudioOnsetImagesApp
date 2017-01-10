@@ -21,6 +21,7 @@ int main( ){
     ofAddListener(secondWindow->events().keyPressed,mainApp.get(),&AudioOnsetImagesApp::keyPressed2);
     
     ofRunApp(mainWindow, mainApp);
+    mainWindow->setWindowShape(windowSettings[0].width, windowSettings[0].height);
     ofRunMainLoop();
 
 }

@@ -68,7 +68,7 @@ void AudioManager::setupText()
     
     ofVec3f position;
     
-    position.x = GuiManager::GUI_WIDTH + 2.5*GuiManager::MARGIN;
+    position.x = GuiManager::GUI_WIDTH + 4*GuiManager::MARGIN;
     float yOffset = AppManager::getInstance().getPreviewManager().getPreviewRect()->getPosition().y + AppManager::getInstance().getPreviewManager().getPreviewRect()->getHeight();
     position.y = 1.5*GuiManager::MARGIN + yOffset;
     
@@ -141,7 +141,7 @@ void AudioManager::draw()
 void AudioManager::drawFFT()
 {
     
-    float xOffset = GuiManager::GUI_WIDTH + 2*GuiManager::MARGIN;
+    float xOffset = GuiManager::GUI_WIDTH + 3.5*GuiManager::MARGIN;
     float yOffset = GuiManager::MARGIN + m_rect->getPosition().y + m_rect->getHeight();
     
     
@@ -152,7 +152,7 @@ void AudioManager::drawFFT()
 void AudioManager::drawFFTFilter()
 {
     
-    float xOffset = GuiManager::GUI_WIDTH + 2*GuiManager::MARGIN;
+    float xOffset = GuiManager::GUI_WIDTH + 3.5*GuiManager::MARGIN;
     float yOffset = GuiManager::MARGIN + m_rect->getPosition().y + m_rect->getHeight();
     
     

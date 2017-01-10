@@ -107,6 +107,8 @@ private:
     
     void setupGuiParameters();
     
+    void setupGuiPresets();
+    
     void setupImageGui();
     
     void setupAudioGui();
@@ -123,6 +125,7 @@ private:
     
     // Fluid GUI
     ofxPanel			m_gui;
+    ofxPanel			m_guiPresets;
     
     ofParameter<float>	m_guiFPS;
     

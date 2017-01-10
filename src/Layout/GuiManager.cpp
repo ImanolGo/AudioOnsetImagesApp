@@ -17,7 +17,7 @@
 const string GuiManager::GUI_SETTINGS_FILE_NAME = "xmls/GuiSettings.xml";
 const string GuiManager::GUI_SETTINGS_NAME = "GUI";
 const float GuiManager::GUI_WIDTH = 350;
-const float GuiManager::MARGIN = 40;
+const float GuiManager::MARGIN = 20;
 
 
 GuiManager::GuiManager(): Manager(), m_showGui(true), m_currentPreset(-1), m_switchColor(0)
@@ -42,9 +42,9 @@ void GuiManager::setup()
 
 
     this->setupGuiParameters();
+    this->setupGuiPresets();
     this->setupImageGui();
     this->setupAudioGui();
-    this->setupPresets();
     this->loadTempPreset();
 
     ofLogNotice() <<"GuiManager::initialized";
@@ -90,7 +90,22 @@ void GuiManager::setupGuiParameters()
     ofxGuiSetFont( "fonts/open-sans/OpenSans-Semibold.ttf", 11 );
 }
 
+void GuiManager::setupGuiPresets()
+{
+    ofColor backgroundColor = AppManager::getInstance().getSettingsManager().getColor("GUI_Background");
+    ofColor fillColor = AppManager::getInstance().getSettingsManager().getColor("GUI_Fill");
+    m_guiPresets.setDefaultBackgroundColor(backgroundColor);
+    m_guiPresets.setDefaultFillColor(fillColor);
+    m_guiPresets.setDefaultHeaderBackgroundColor(m_colors[m_switchColor]);
+    m_guiPresets.setDefaultFillColor(m_colors[m_switchColor]);
 
+    m_guiPresets.setDefaultWidth(GUI_WIDTH);
+    m_guiPresets.setup("GuiPresets", "xmls/GuiPresets.xml");
+    m_guiPresets.setPosition(ofGetWidth() - GUI_WIDTH*0.5 - MARGIN, MARGIN);
+    //m_guiPresets.setPosition(200, 20);
+    
+    this->setupPresets();
+}
 
 void GuiManager::setupImageGui()
 {
@@ -210,10 +225,6 @@ void GuiManager::setupAudioGui()
 
 void GuiManager::setupPresets()
 {
-    m_gui.setDefaultHeaderBackgroundColor(m_colors[m_switchColor]);
-    m_gui.setDefaultFillColor(m_colors[m_switchColor]);
-    m_switchColor = 1 - m_switchColor;
-    
     this->deleteTempPresets();
     
     auto foldersVector = AppManager::getInstance().getImageManager().getFoldersNames();
@@ -232,7 +243,7 @@ void GuiManager::setupPresets()
    // m_matrixNotes.setElementHeight(26);
     m_matrixPresets.allowMultipleActiveToggles(false);
     
-    m_gui.add(&m_matrixPresets);
+    m_guiPresets.add(&m_matrixPresets);
 }
 
 void GuiManager::update()
@@ -262,6 +273,7 @@ void GuiManager::draw()
 
     m_guiFPS = ofGetFrameRate();
     m_gui.draw();
+    m_guiPresets.draw();
 }
 
 
