@@ -61,6 +61,8 @@ class ImageManager: public Manager
     
         void onChangeBrightness(int& value);
     
+        void onChangeCrossFade(bool& value);
+    
         void setImageGroup(int index);
     
         const vector<string>& getFoldersNames() {return m_folderNames;}
@@ -73,6 +75,8 @@ class ImageManager: public Manager
     private:
 
         void loadImages();
+    
+        void loadImage(ofPtr<ImageVisual> image, int index);
     
         void setupRectangle();
     
@@ -111,6 +115,7 @@ class ImageManager: public Manager
         IndexVector             m_indexes;              ///< current available indexes
     
         int                     m_currentIndex;     ///< current image index
+        int                     m_prevIndex;        ///< previous image index
         float                   m_fadeTime;         ///< fade time for the animations
         float                   m_fadeTimeMin;      ///< minimum fade time of random selection
         float                   m_fadeTimeMax;      ///< maximum fade time of random selection
@@ -118,8 +123,10 @@ class ImageManager: public Manager
         bool                    m_randomFade;       ///< defines wether the images fade time are random or not
         bool                    m_noFade;           ///< defines if the image needs to fade or not
         bool                    m_stop;             ///< defines if the images will be shown or not
+        bool                    m_crossFadeImages;  ///< determines whether to crossfade images or not
     
         ofPtr<ImageVisual>      m_currentImage;  ///< current image to be displayed
+        ofPtr<ImageVisual>      m_previousImage; ///< previous image to be displayed
         ofPtr<RectangleVisual>  m_darknessRect;  ///< darkness rectangle
 
 };

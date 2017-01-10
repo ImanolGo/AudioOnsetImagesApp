@@ -18,7 +18,7 @@
 
 
 
-ImageManager::ImageManager(): Manager(), m_currentIndex(0), m_fadeTime(2.0), m_random(false), m_randomFade(false),m_fadeTimeMin(0), m_fadeTimeMax(10), m_noFade(false), m_stop(false)
+ImageManager::ImageManager(): Manager(), m_currentIndex(0), m_prevIndex(0), m_fadeTime(2.0), m_random(false), m_randomFade(false),m_fadeTimeMin(0), m_fadeTimeMax(10), m_noFade(false), m_stop(false), m_crossFadeImages(false)
 {
 	//Intentionally left empty
 }
@@ -39,6 +39,7 @@ void ImageManager::setup()
 	Manager::setup();
 
     m_currentImage =  ofPtr<ImageVisual>(new ImageVisual());
+    m_previousImage =  ofPtr<ImageVisual>(new ImageVisual());
 
     this->setupRectangle();
     this->loadImages();
@@ -128,6 +129,7 @@ void ImageManager::setImageGroup(int index)
     if(m_imageNames.find(index)!=m_imageNames.end()){
         m_currentImageNames = m_imageNames[index];
         m_indexes.empty();
+        m_prevIndex = m_currentIndex;
         m_currentIndex = 0;
         this->loadNextImage();
         AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_currentImage);
@@ -200,12 +202,13 @@ void ImageManager::nextImageIndex()
 
 void ImageManager::nextOrderedImageIndex()
 {
-    
+    m_prevIndex = m_currentIndex;
     m_currentIndex = (m_currentIndex+1)%m_currentImageNames.size();
 }
 
 void ImageManager::previousImageOrderedIndex()
 {
+    m_prevIndex = m_currentIndex;
     m_currentIndex--;
     if(m_currentIndex<0){
         m_currentIndex = m_currentImageNames.size()-1;
@@ -223,7 +226,7 @@ void ImageManager::nextRandomImageIndex()
     
     int n = (int) ceil( ofRandom(m_indexes.size()-1));
     
-    
+    m_prevIndex = m_currentIndex;
     m_currentIndex = m_indexes[n];
     m_indexes.erase(m_indexes.begin() + n);
     
@@ -233,33 +236,58 @@ void ImageManager::nextRandomImageIndex()
 
 void ImageManager::loadNextImage()
 {
+    this->loadImage(m_currentImage, m_currentIndex);
+    this->loadImage(m_previousImage, m_prevIndex);
+}
+
+void ImageManager::loadImage(ofPtr<ImageVisual> image, int index)
+{
+    if(index<0 || index>= m_currentImageNames.size()){
+        ofLogNotice()<< "ImageManager::loadImage-> Non valid index : " << index;
+    }
+    
+    ofLogNotice()<< "ImageManager::loadImage-> index : " << index;
 
     WindowSettingsManager::WindowSettingsVector windowSettings = WindowSettingsManager::getInstance().getWindowsSettings();
-
+    
     float width = windowSettings[1].width;
     float height = windowSettings[1].height;
-
-
-    m_currentImage->setResource(m_currentImageNames[m_currentIndex]);
-    m_currentImage->setPosition(ofPoint(width*0.5,height*0.5));
-    m_currentImage->setCentred(true);
-    m_currentImage->setAlpha(255);
-
-
+    
+    
+    image->setResource(m_currentImageNames[index]);
+    image->setPosition(ofPoint(width*0.5,height*0.5));
+    image->setCentred(true);
+    
+    
     //ofLogNotice()<< "ImageManager::loadNextImage-> Loading current image : " <<m_currentImageNames[m_currentIndex];
-    if(m_currentImage->getOriginalWidth() > m_currentImage->getOriginalHeight()){
-        m_currentImage->setWidth(width,true);
+    if(image->getOriginalWidth() > image->getOriginalHeight()){
+        image->setWidth(width,true);
     }
     else{
-        m_currentImage->setWidth(height,true);
+        image->setWidth(height,true);
     }
+    
 }
 
 void ImageManager::setAnimations()
 {
     float fadeTime = this->getFadeTime();
     AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_currentImage);
-    AppManager::getInstance().getVisualEffectsManager().createFadeEffect(m_currentImage, 255.0, 0.0, 0.0, fadeTime);
+    AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_previousImage);
+    
+
+    if(m_crossFadeImages){
+        AppManager::getInstance().getVisualEffectsManager().createFadeEffect(m_currentImage, 0.0, 255.0, 0.0, fadeTime);
+        AppManager::getInstance().getVisualEffectsManager().createFadeEffect(m_previousImage, 255.0, 0.0, 0.0, fadeTime);
+        m_previousImage->setAlpha(255);
+        m_currentImage->setAlpha(0);
+    }
+    else{
+        AppManager::getInstance().getVisualEffectsManager().createFadeEffect(m_currentImage, 255.0, 0.0, 0.0, fadeTime);
+        m_currentImage->setAlpha(255);
+        m_previousImage->setAlpha(0);
+    }
+   
 }
 
 float ImageManager::getFadeTime() const
@@ -286,12 +314,20 @@ void ImageManager::update()
 void ImageManager::draw()
 {
     
+    ofPushStyle();
+    ofEnableAlphaBlending();
     ofClear(0);
     if(m_currentImage){
         m_currentImage->draw();
     }
     
+    if(m_crossFadeImages && m_previousImage){
+         m_previousImage->draw();
+    }
+    
     m_darknessRect->draw();
+    ofDisableAlphaBlending();
+    ofPopStyle();
 }
 
 
@@ -314,6 +350,7 @@ void ImageManager::onChangeMaxFadeTime(float& value)
 void ImageManager::onChangeRandomImages(bool& value)
 {
     m_random = value;
+    m_prevIndex = m_currentIndex;
     if(!m_random){
         m_currentIndex = m_currentImageNames.size() - 1;
         //ofLogNotice()<< "ImageManager::loadNextImage-> Set to image: " << m_currentIndex;
@@ -336,6 +373,7 @@ void ImageManager::stop(bool value)
     
     if(m_stop){
         AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_currentImage);
+        AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_previousImage);
         m_currentImage->setAlpha(0);
     }
 }
@@ -348,9 +386,11 @@ void ImageManager::pause(bool value)
     
     if(m_stop){
         AppManager::getInstance().getVisualEffectsManager().stopAllVisualEffects(m_currentImage);
+        AppManager::getInstance().getVisualEffectsManager().stopAllVisualEffects(m_previousImage);
     }
     else{
         AppManager::getInstance().getVisualEffectsManager().continueAllVisualEffects(m_currentImage);
+        AppManager::getInstance().getVisualEffectsManager().continueAllVisualEffects(m_previousImage);
     }
     
 }
@@ -359,5 +399,10 @@ void ImageManager::onChangeBrightness(int& value)
 {
     int alpha = ofMap(value,0,255,255,0, true);
     m_darknessRect->setAlpha(alpha);
+}
+
+void ImageManager::onChangeCrossFade(bool& value)
+{
+    m_crossFadeImages = value;
 }
 

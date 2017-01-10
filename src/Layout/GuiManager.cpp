@@ -106,6 +106,10 @@ void GuiManager::setupImageGui()
     m_brightness.addListener(imageManager, &ImageManager::onChangeBrightness);
     m_parametersImage.add(m_brightness);
     
+    m_crossFadeImgs.set("Crossfading", false);
+    m_crossFadeImgs.addListener(imageManager, &ImageManager::onChangeCrossFade);
+    m_parametersImage.add(m_crossFadeImgs);
+    
     m_fadeTime.set("Fade Time", 2.0, 0.1, 30.0);
     m_fadeTime.addListener(imageManager, &ImageManager::onChangeFadeTime);
     m_parametersImage.add(m_fadeTime);

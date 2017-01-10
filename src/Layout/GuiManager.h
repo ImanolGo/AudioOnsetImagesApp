@@ -137,7 +137,8 @@ private:
     ofParameter<bool>     m_randomImages;
     ofParameter<bool>     m_randomFadeTime;
     ofParameter<bool>     m_noFade;
-    ofParameter<int>    m_brightness;
+    ofParameter<bool>     m_crossFadeImgs;
+    ofParameter<int>      m_brightness;
    
     
     ofParameter<int>            m_lowFreqCut;
