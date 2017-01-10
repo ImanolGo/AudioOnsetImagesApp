@@ -83,11 +83,21 @@ public:
     
     void setStop(bool value) {m_stop = value;}
     
+    void setPause(bool value) {m_pause = value;}
+
     void setNoFade(bool value) {m_noFade = value;}
     
     void setThreshold(float value) {m_threshold = value;}
     
+    void setLowFreqCut(float value) {m_lowFreqCut = value;}
+    
+    void setHighFreqCut(float value) {m_highFreqCut = value;}
+    
     void setDecayTime(float value) {m_decayTime = value;}
+    
+    void setBrightness(float value) {m_brightness = value;}
+    
+    void setCrossfading(bool value) {m_crossFadeImgs = value;}
     
     void setNote(const ofVec2f& value);
     

@@ -75,6 +75,12 @@ void OscManager::update()
             float value = m.getArgAsFloat(0);
             AppManager::getInstance().getGuiManager().setFadeTime(value);
         }
+        
+        else if(m.getAddress() == "/Brightness")
+        {
+            float value = m.getArgAsFloat(0);
+            AppManager::getInstance().getGuiManager().setBrightness(value);
+        }
 
         else if(m.getAddress() == "/FadeTimeMin")
         {
@@ -104,8 +110,13 @@ void OscManager::update()
                 AppManager::getInstance().getImageManager().previousImage();
             }
         }
-
         
+        else if(m.getAddress() == "/Crossfading")
+        {
+            bool value = m.getArgAsInt(0) > 0;
+            AppManager::getInstance().getGuiManager().setCrossfading(value);
+        }
+
         else if(m.getAddress() == "/RandomImages")
         {
             bool value = m.getArgAsInt(0) > 0;
@@ -124,6 +135,24 @@ void OscManager::update()
             AppManager::getInstance().getGuiManager().setStop(value);
         }
         
+        else if(m.getAddress() == "/Pause")
+        {
+            bool value = m.getArgAsInt(0) > 0;
+            AppManager::getInstance().getGuiManager().setPause(value);
+        }
+        
+        else if(m.getAddress() == "/SaveAllPresets")
+        {
+            bool value = m.getArgAsInt(0) > 0;
+            AppManager::getInstance().getGuiManager().saveAllPresets();
+        }
+        
+        else if(m.getAddress() == "/SaveCurrentPreset")
+        {
+            bool value = m.getArgAsInt(0) > 0;
+            AppManager::getInstance().getGuiManager().saveCurrentPreset();
+        }
+        
         else if(m.getAddress() == "/NoFade")
         {
             bool value = m.getArgAsInt(0) > 0;
@@ -134,6 +163,18 @@ void OscManager::update()
         {
             float value = m.getArgAsFloat(0);
             AppManager::getInstance().getGuiManager().setThreshold(value);
+        }
+        
+        else if(m.getAddress() == "/LowFreqCut")
+        {
+            float value = m.getArgAsFloat(0);
+            AppManager::getInstance().getGuiManager().setLowFreqCut(value);
+        }
+        
+        else if(m.getAddress() == "/HighFreqCut")
+        {
+            float value = m.getArgAsFloat(0);
+            AppManager::getInstance().getGuiManager().setHighFreqCut(value);
         }
         
         else if(m.getAddress() == "/DecayTime")
