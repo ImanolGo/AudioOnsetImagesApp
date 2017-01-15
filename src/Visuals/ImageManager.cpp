@@ -38,14 +38,10 @@ void ImageManager::setup()
 
 	Manager::setup();
 
-    m_currentImage =  ofPtr<ImageVisual>(new ImageVisual());
-    m_previousImage =  ofPtr<ImageVisual>(new ImageVisual());
-
     this->setupRectangle();
     this->loadImages();
     this->setImageGroup(0);
     this->loadNextImage();
-    m_currentImage->setAlpha(0);
     
     ofLogNotice() <<"ImageManager::initialized" ;
 
@@ -65,6 +61,12 @@ void ImageManager::setupRectangle()
 
 void ImageManager::loadImages()
 {
+    m_currentImage =  ofPtr<ImageVisual>(new ImageVisual());
+    m_previousImage =  ofPtr<ImageVisual>(new ImageVisual());
+
+    m_currentImage->setAlpha(0);
+    m_previousImage->setAlpha(0);
+    
     ofLogNotice() <<"ImageManager::loading images ..." ;
     //some path, may be absolute or relative to bin/data
     string path = "images/performance/";
@@ -149,9 +151,15 @@ void ImageManager::nextImage()
     this->nextImageIndex();
     this->loadNextImage();
     
-    if(!m_noFade){
-        this->setAnimations();
+    if(m_noFade){
+        m_currentImage->setAlpha(255);
+        m_previousImage->setAlpha(0);
+       
     }
+    else{
+         this->setAnimations();
+    }
+ 
 }
 
 void ImageManager::previousImage()
@@ -365,6 +373,14 @@ void ImageManager::onChangeRandomFade(bool& value)
 void ImageManager::onChangeNoFade(bool& value)
 {
     m_noFade = value;
+    
+    if(m_noFade){
+        AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_currentImage);
+        AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_previousImage);
+        
+        m_currentImage->setAlpha(255);
+        m_previousImage->setAlpha(0);
+    }
 }
 
 void ImageManager::stop(bool value)
