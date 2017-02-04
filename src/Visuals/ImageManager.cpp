@@ -136,6 +136,7 @@ void ImageManager::setImageGroup(int index)
         this->loadNextImage();
         AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_currentImage);
         m_currentImage->setAlpha(0);
+        m_previousImage->setAlpha(0);
         ofLogNotice()<< "ImageManager::set image group-> group : " << index;
     }
     
@@ -152,6 +153,8 @@ void ImageManager::nextImage()
     this->loadNextImage();
     
     if(m_noFade){
+        AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_currentImage);
+        AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_previousImage);
         m_currentImage->setAlpha(255);
         m_previousImage->setAlpha(0);
        
@@ -374,13 +377,13 @@ void ImageManager::onChangeNoFade(bool& value)
 {
     m_noFade = value;
     
-    if(m_noFade){
-        AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_currentImage);
-        AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_previousImage);
-        
-        m_currentImage->setAlpha(255);
-        m_previousImage->setAlpha(0);
-    }
+//    if(m_noFade){
+//        AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_currentImage);
+//        AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_previousImage);
+//        
+//        m_currentImage->setAlpha(255);
+//        m_previousImage->setAlpha(0);
+//    }
 }
 
 void ImageManager::stop(bool value)
