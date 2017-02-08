@@ -131,13 +131,27 @@ void ImageManager::setImageGroup(int index)
     if(m_imageNames.find(index)!=m_imageNames.end()){
         m_currentImageNames = m_imageNames[index];
         m_indexes.empty();
-        m_prevIndex = m_currentIndex;
-        m_currentIndex = 0;
+        
+        if(m_currentImageNames.size()<1){
+            return;
+        }
+        
+        m_currentIndex = m_currentImageNames.size() - 1;
+        m_prevIndex = m_currentIndex - 1;
+        if(m_prevIndex<0){
+            m_prevIndex = m_currentImageNames.size()-1;
+        }
+        
+        ofLogNotice()<< "ImageManager::setImageGroup-> group : " << index;
+        
+         //ofLogNotice()<< "ImageManager::setImageGroup-> m_imageNames size : " << m_currentImageNames.size();
+        
+        
         this->loadNextImage();
         AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_currentImage);
         m_currentImage->setAlpha(0);
         m_previousImage->setAlpha(0);
-        ofLogNotice()<< "ImageManager::set image group-> group : " << index;
+        
     }
     
 
@@ -162,6 +176,8 @@ void ImageManager::nextImage()
     else{
          this->setAnimations();
     }
+    
+     ofLogNotice()<< "ImageManager::nextImage> currentIndex : " << m_currentIndex << ",  prevIndex -> " << m_prevIndex;
  
 }
 
@@ -275,7 +291,7 @@ void ImageManager::loadImage(ofPtr<ImageVisual> image, int index)
         image->setWidth(width,true);
     }
     else{
-        image->setWidth(height,true);
+        image->setHeight(height,true);
     }
     
 }
@@ -285,13 +301,19 @@ void ImageManager::setAnimations()
     float fadeTime = this->getFadeTime();
     AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_currentImage);
     AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_previousImage);
-    
 
+    
     if(m_crossFadeImages){
-        AppManager::getInstance().getVisualEffectsManager().createFadeEffect(m_currentImage, 0.0, 255.0, 0.0, fadeTime);
-        AppManager::getInstance().getVisualEffectsManager().createFadeEffect(m_previousImage, 255.0, 0.0, 0.0, fadeTime);
-        m_previousImage->setAlpha(255);
-        m_currentImage->setAlpha(0);
+        float currAlpha = m_currentImage->getAlpha();
+        float prevAlpha = m_previousImage->getAlpha();
+        m_previousImage->setAlpha(currAlpha);
+        m_currentImage->setAlpha(0.0);
+        
+        AppManager::getInstance().getVisualEffectsManager().createFadeEffect(m_currentImage, 255.0, 0.0, fadeTime);
+        AppManager::getInstance().getVisualEffectsManager().createFadeEffect(m_previousImage, 0.0, 0.0, fadeTime);
+        //m_currentImage->setAlpha(prevAlpha);
+        //m_previousImage->setAlpha(currAlpha);
+        
     }
     else{
         AppManager::getInstance().getVisualEffectsManager().createFadeEffect(m_currentImage, 255.0, 0.0, 0.0, fadeTime);
