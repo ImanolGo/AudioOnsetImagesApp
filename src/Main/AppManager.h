@@ -94,8 +94,9 @@ public:
     void onChangeStop(bool& value);
     
     void onChangePause(bool& value);
-
-
+    
+    void onChangeBlackout(bool& value);
+    
 private:
 
      //! Constructor
@@ -132,7 +133,7 @@ private:
     AudioManager             m_audioManager;             ///< Manages the audio
     MidiManager              m_midiManager;              ///< Manages the MIDI
     OscManager               m_oscManager;               ///< Manages the OSC messages
-
+    
     bool                     m_debugMode;
 };
 

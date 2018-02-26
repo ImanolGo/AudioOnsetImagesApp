@@ -42,10 +42,11 @@ void AppManager::setup()
     
     ofLogNotice() << "AppManager::initialized";
 
-	Manager::setup();
     
     this->setupOF();
 	this->setupManagers();
+    
+    Manager::setup();
     
     //setDebugMode(m_debugMode);
 }
@@ -80,6 +81,9 @@ void AppManager::setupManagers()
 
 void AppManager::update()
 {
+    if(!m_initialized)
+        return;
+    
     m_oscManager.update();
     m_visualEffectsManager.update();
     m_guiManager.update();
@@ -91,7 +95,11 @@ void AppManager::update()
 
 void AppManager::draw()
 {
+    
     ofClear(0);
+    
+    if(!m_initialized)
+        return;
     
     m_viewManager.draw();
     m_guiManager.draw();
@@ -132,6 +140,12 @@ void AppManager::onChangeStop(bool& value)
 void AppManager::onChangePause(bool& value)
 {
     m_imageManager.pause(value);
+    m_audioManager.stop(value);
+}
+
+void AppManager::onChangeBlackout(bool& value)
+{
+    m_imageManager.blackout(value);
     m_audioManager.stop(value);
 }
 

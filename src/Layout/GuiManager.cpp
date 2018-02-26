@@ -87,6 +87,12 @@ void GuiManager::setupGuiParameters()
     m_pause.addListener(appManager, &AppManager::onChangePause);
     m_gui.add(m_pause);
     
+    m_blackout.set("Blackout", false);
+    m_blackout.addListener(appManager, &AppManager::onChangeBlackout);
+    m_gui.add(m_blackout);
+    
+    
+    
     ofxGuiSetFont( "fonts/open-sans/OpenSans-Semibold.ttf", 11 );
 }
 
@@ -98,10 +104,14 @@ void GuiManager::setupGuiPresets()
     m_guiPresets.setDefaultFillColor(fillColor);
     m_guiPresets.setDefaultHeaderBackgroundColor(m_colors[m_switchColor]);
     m_guiPresets.setDefaultFillColor(m_colors[m_switchColor]);
-
+    
+    
+    auto windowSettings = WindowSettingsManager::getInstance().getWindowsSettings();
+    
     m_guiPresets.setDefaultWidth(GUI_WIDTH);
     m_guiPresets.setup("GuiPresets", "xmls/GuiPresets.xml");
-    m_guiPresets.setPosition(ofGetWidth() - GUI_WIDTH*0.5 - MARGIN, MARGIN);
+    m_guiPresets.setPosition(windowSettings[0].width - GUI_WIDTH - MARGIN, MARGIN);
+    
     //m_guiPresets.setPosition(200, 20);
     
     this->setupPresets();
@@ -186,7 +196,7 @@ void GuiManager::setupAudioGui()
     m_threshold.addListener(audioManager, &AudioManager::onChangeThreshold);
     m_parametersAudio.add(m_threshold);
     
-    m_decayTime.set("Decay Time", 0.5, 0.01, 5.0);
+    m_decayTime.set("Decay Time", 0.5, 0.01, 30.0);
     m_decayTime.addListener(audioManager, &AudioManager::onChangeDecayTime);
     m_parametersAudio.add(m_decayTime);
     

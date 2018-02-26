@@ -71,6 +71,7 @@ class ImageManager: public Manager
     
         void pause(bool value);
     
+        void blackout(bool value);
 
     private:
 

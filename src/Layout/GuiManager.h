@@ -133,6 +133,7 @@ private:
     ofxButton           m_saveAllPresets;
     ofParameter<bool>   m_stop;
     ofParameter<bool>   m_pause;
+    ofParameter<bool>   m_blackout;
     
     
     ofParameterGroup    m_parametersImage;

@@ -162,7 +162,11 @@ void ImageManager::nextImage()
     if(m_currentImageNames.empty()){
         return;
     }
-
+    
+    if(m_crossFadeImages && m_previousImage->getAlpha()>0){
+        return;
+    }
+        
     this->nextImageIndex();
     this->loadNextImage();
     
@@ -183,10 +187,15 @@ void ImageManager::nextImage()
 
 void ImageManager::previousImage()
 {
+    
     if(m_currentImageNames.empty()){
         return;
     }
     
+    if(m_crossFadeImages && m_previousImage->getAlpha()>0){
+        return;
+    }
+        
     this->previousImageIndex();
     this->loadNextImage();
     
@@ -298,6 +307,7 @@ void ImageManager::loadImage(ofPtr<ImageVisual> image, int index)
 
 void ImageManager::setAnimations()
 {
+    
     float fadeTime = this->getFadeTime();
     AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_currentImage);
     AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_previousImage);
@@ -434,6 +444,21 @@ void ImageManager::pause(bool value)
         AppManager::getInstance().getVisualEffectsManager().continueAllVisualEffects(m_previousImage);
     }
     
+}
+
+void ImageManager::blackout(bool value)
+{
+    m_stop = value;
+    
+    ofLogNotice()<< "ImageManager::blackout-> Blackout: " << m_stop;
+    
+    if(m_stop){
+        AppManager::getInstance().getVisualEffectsManager().stopAllVisualEffects(m_currentImage);
+        AppManager::getInstance().getVisualEffectsManager().stopAllVisualEffects(m_previousImage);
+        
+        AppManager::getInstance().getVisualEffectsManager().createFadeEffect(m_currentImage, 0.0, 0.0, 1.0);
+        AppManager::getInstance().getVisualEffectsManager().createFadeEffect(m_previousImage, 0.0, 0.0, 1.0);
+    }
 }
 
 void ImageManager::onChangeBrightness(int& value)
