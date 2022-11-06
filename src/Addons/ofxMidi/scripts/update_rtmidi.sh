@@ -12,7 +12,7 @@
 
 WD=$(dirname $0)
 
-VER=2.1.0
+VER=4.0.0
 
 SRC=rtmidi-$VER
 DEST=../libs/rtmidi
@@ -32,12 +32,18 @@ tar -xvf rtmidi-$VER.tar.gz
 mkdir -p $DEST
 
 # copy license
-cp -v $SRC/readme $DEST
+cp -v $SRC/README.md $DEST
+
+# don't need C API
+rm $SRC/rtmidi_c.*
 
 # copy sources
 cp -v $SRC/*.h $DEST
 cp -v $SRC/*.cpp $DEST
 
-# cleanup
-rm -rfv $SRC rtmidi-$VER.tar.gz
+# add include so MIDI api is set when compiling
+# the line to add may need to be changed as the RtMidi.h header changes
+printf "%s\n\n" 47i "#include \"ofxMidiConstants.h\"" . x | ex $DEST/RtMidi.h
 
+# cleanup
+rm -rf $SRC rtmidi-$VER.tar.gz

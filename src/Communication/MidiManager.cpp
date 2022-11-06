@@ -40,7 +40,7 @@ void MidiManager::setup()
 void MidiManager::setupMidiPorts()
 {
     // print the available output ports to the console
-    m_midiOut.listPorts(); // via instance
+    m_midiOut.listOutPorts(); // via instance
     //ofxMidiOut::listPorts(); // via static too
     
     // connect

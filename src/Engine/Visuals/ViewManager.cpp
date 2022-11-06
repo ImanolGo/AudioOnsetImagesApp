@@ -44,7 +44,7 @@ void ViewManager::setup()
 void ViewManager::setupGL()
 {
     
-    ofSetVerticalSync(false);
+    ofSetVerticalSync(true);
     ofEnableLighting();
     ofEnableAlphaBlending();
     ofEnableSmoothing();
@@ -99,17 +99,17 @@ void ViewManager::draw()
     this->drawOverlays();
     this->drawVisuals();
     
-    ofPushStyle();
-    ofSetColor(ofColor::white);
-    string text = "fps: " + ofToString(ofGetFrameRate(), 2);
-    ofDrawBitmapString(text, 20, 20);
-    ofPopStyle();
+//    ofPushStyle();
+//    ofSetColor(ofColor::white);
+//    string text = "fps: " + ofToString(ofGetFrameRate(), 2);
+//    ofDrawBitmapString(text, 20, 20);
+//    ofPopStyle();
 }
 
 void ViewManager::drawBackround()
 {
-    ofClear ( 0 );
-    //ofBackgroundGradient(ofColor::white, ofColor::gray);
+    //ofClear ( 0 );
+    ofBackgroundGradient(ofColor::gray, ofColor::black);
     //ofColor centerColor = AppManager::getInstance().getSettingsManager()->getColor("CenterBackgroundColor");
     //ofColor edgeColor = AppManager::getInstance().getSettingsManager()->getColor("EdgeBackgroundColor");
     //ofBackgroundGradient(centerColor,edgeColor,OF_GRADIENT_CIRCULAR);

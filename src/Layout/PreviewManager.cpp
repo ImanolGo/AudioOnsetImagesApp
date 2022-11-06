@@ -47,8 +47,8 @@ void PreviewManager::setupFbos()
     
     for (int i = 1; i < windowSettings.size(); i++) {
         ofPtr<ofFbo> fbo =  ofPtr<ofFbo>(new ofFbo());
-        fbo->allocate(windowSettings[i].width, windowSettings[i].height, GL_RGBA);
-        ofLogNotice() <<"PreviewManager::setupFbos -> width =  " << windowSettings[i].width << ", height =  " << windowSettings[i].height;
+        fbo->allocate(windowSettings[i].getWidth(), windowSettings[i].getHeight(), GL_RGBA, 4);
+        ofLogNotice() <<"PreviewManager::setupFbos -> width =  " << windowSettings[i].getWidth() << ", height =  " << windowSettings[i].getHeight();
         
         fbo->begin(); ofClear(0); fbo->end();
         m_fbos.push_back(fbo);
@@ -101,11 +101,11 @@ void PreviewManager::setupRectangles()
         position.x = 3.5*GuiManager::MARGIN + GuiManager::GUI_WIDTH;
 
         if(m_fbos[indexWindow]->getWidth()> m_fbos[indexWindow]->getHeight()){
-            width = (windowSettings[0].width - 4*GuiManager::MARGIN - GuiManager::GUI_WIDTH)*0.5;
+            width = (windowSettings[0].getWidth() - 4*GuiManager::MARGIN - GuiManager::GUI_WIDTH)*0.5;
             height = width *  m_fbos[indexWindow]->getHeight()/  m_fbos[indexWindow]->getWidth();
         }
         else{
-            height = (windowSettings[0].width - 4*GuiManager::MARGIN - GuiManager::GUI_WIDTH)*0.5;
+            height = (windowSettings[0].getWidth() - 4*GuiManager::MARGIN - GuiManager::GUI_WIDTH)*0.5;
             width = height *  m_fbos[indexWindow]->getWidth()/  m_fbos[indexWindow]->getHeight();
         }
         //height = windowSettings.height * 0.4;

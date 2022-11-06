@@ -10,7 +10,7 @@
 #pragma once
 
 #include "Manager.h"
-#include "ofxGuiExtended.h"
+#include "ofxImGui.h"
 //========================== class GuiManager ==============================
 //============================================================================
 /** \class GuiManager GuiManager.h
@@ -49,25 +49,22 @@ public:
     
     void saveCurrentPreset();
     
-    void saveTempPreset();
+    void saveTempPreset(int index);
     
-    void loadTempPreset();
+    void loadTempPreset(int index);
     
     void toggleGui();
     
     void showGui(bool show){m_showGui=show;}
     
-    int getWidth() {return GUI_WIDTH;}
+    int getWidth() {return m_width;}
     
-    int getHeight() {return m_gui.getHeight();}
+    int getHeight() {return m_height;}
     
-    ofPoint  getPosition() {return m_gui.getPosition();}
+    ofPoint  getPosition() {return m_position;}
     
-    void  onNoteChange(bool& value);
+    void  onPresetChange(int& value);
     
-    void  onPresetChange(bool& value);
-    
-    int  getCurrentNoteIndex();
     
     vector<int> getNoteIndexes();
     
@@ -105,6 +102,8 @@ public:
     
 private:
     
+    void drawGui();
+    
     void setupGuiParameters();
     
     void setupGuiPresets();
@@ -120,17 +119,16 @@ private:
     void updatePresets();
     
     void deleteTempPresets();
+    
+    void updateSize(const ofxImGui::Settings& settings);
 
 private:
     
-    // Fluid GUI
-    ofxPanel			m_gui;
-    ofxPanel			m_guiPresets;
-    
-    ofParameter<float>	m_guiFPS;
-    
-    ofxButton           m_saveCurrentPreset;
-    ofxButton           m_saveAllPresets;
+    ofxImGui::Gui			m_gui;
+    ofxImGui::Gui			m_guiPresets;
+
+
+    ofParameterGroup    m_parameters;
     ofParameter<bool>   m_stop;
     ofParameter<bool>   m_pause;
     ofParameter<bool>   m_blackout;
@@ -140,11 +138,11 @@ private:
     ofParameterGroup    m_parametersAudio;
     ofParameterGroup    m_parametersPresets;
     
-    ofxGuiMatrix        m_matrixNotes;
+    ofParameterGroup        m_matrixNotes;
     
-    ofxGuiMatrix        m_matrixPresets;
+    ofParameterGroup        m_matrixPresets;
     
-    
+    	
     ofParameter<float>    m_fadeTime;
     ofParameter<float>    m_fadeTimeMin;
     ofParameter<float>    m_fadeTimeMax;
@@ -163,14 +161,17 @@ private:
     vector<ofParameter<bool>>   m_notes_params;
     vector<int>                 m_noteIndexes;
     
-    vector<ofParameter<bool>>   m_presetParameters;
-    
-    int m_currentPreset;
+    ofParameter<int>            m_currentPreset;
+    int                         m_lastPreset;
+    std::vector<std::string>    m_presetNames;
    
     bool        m_showGui;  //It defines the whether the gui should be shown or not
     
     vector<ofColor>         m_colors;
     int                     m_switchColor;
+    
+    float m_width, m_height;
+    ofPoint   m_position;
 };
 
 //==========================================================================

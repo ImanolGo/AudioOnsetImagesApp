@@ -12,7 +12,7 @@
 
 #include "ofxBaseMidi.h"
 
-// choose the midi backend
+// choose the MIDI backend
 #ifdef TARGET_OF_IPHONE
 	#include "ios/ofxPGMidiOut.h"
 	#define OFX_MIDI_OUT_TYPE ofxPGMidiOut
@@ -22,30 +22,30 @@
 #endif
 
 ///
-/// a midi output port
+/// a MIDI output port
 ///
 /// create multiple instances to connect to multiple ports
 ///
 /// *do not* create static instances as this will lead to a crash on Linux,
-/// instead create a static ofPtr and initialize it later:
+/// instead create a static std::shared_ptr and initialize it later:
 ///
 /// in .h:
 ///    class MyClass {
 ///
 ///        ...
 ///
-///        static ofPtr<ofxMidiOut> s_midiOut;
+///        static std::shared_ptr<ofxMidiOut> s_midiOut;
 ///    }
 ///
 /// in .cpp:
-///    ofPtr<ofxMidiOut> MyClass::s_midiOut;
+///    std::shared_ptr<ofxMidiOut> MyClass::s_midiOut;
 ///
 ///    ...
 ///
 ///    // initialize somewhere else
 ///    void MyClass::setup() {
 ///        if(s_midiOut == NULL) {
-///            s_midiOut = ofPtr<ofxMidiOut>(new ofxMidiOut("ofxMidi Client"));
+///            s_midiOut = std::shared_ptr<ofxMidiOut>(new ofxMidiOut("ofxMidi Client"));
 ///        }
 ///    }
 ///
@@ -54,31 +54,31 @@ class ofxMidiOut {
 public:
 
 	/// set the output client name (optional)
-	ofxMidiOut(const string name="ofxMidiOut Client");
+	ofxMidiOut(const std::string name="ofxMidiOut Client", ofxMidiApi api=MIDI_API_DEFAULT);
 	virtual ~ofxMidiOut();
 	
 /// \section Global Port Info
 	
 	/// print the connected output ports
-	static void listPorts();
+	void listOutPorts();
 	
 	/// get a list of output port names
 	/// 
 	/// the vector index corresponds with the name's port number
 	///
 	/// note: this order may change when new devices are added/removed
-	///		  from the system
+	///       from the system
 	///
-	static vector<string>& getPortList();
+	std::vector<std::string> getOutPortList();
 	
 	/// get the number of output ports
-	static int getNumPorts();
+	int getNumOutPorts();
 	
 	/// get the name of an output port by it's number
 	///
 	/// returns "" if number is invalid
 	///
-	static string getPortName(unsigned int portNumber);
+	std::string getOutPortName(unsigned int portNumber);
 	
 /// \section Connection
 	
@@ -87,17 +87,17 @@ public:
 	/// setting port = 0 will open the first available
 	///
 	bool openPort(unsigned int portNumber=0);
-	bool openPort(string deviceName);
+	bool openPort(std::string deviceName);
 	
-	/// create and connect to a virtual output port (MacOS and Linux ALSA only)
+	/// create and connect to a virtual output port (macOS and Linux ALSA only)
 	///
 	/// allows for connections between software
 	///
 	/// note: a connected virtual port has a portNum = -1
-	///	note: an open virtual port ofxMidiOut object cannot see it's virtual
+	/// note: an open virtual port ofxMidiOut object cannot see it's virtual
 	///       own virtual port when listing ports
 	///
-	bool openVirtualPort(string portName="ofxMidi Virtual Output");
+	bool openVirtualPort(std::string portName="ofxMidi Virtual Output");
 	
 	/// close the port connection
 	void closePort();
@@ -112,7 +112,7 @@ public:
 	///
 	/// returns "" if not connected
 	///
-	string getName();
+	std::string getName();
 	
 	/// returns true if connected
 	bool isOpen();
@@ -122,12 +122,11 @@ public:
 	
 /// \section Sending
 	
-	///
-	/// midi events
+	/// MIDI events
 	///
 	/// number ranges:
 	///     channel         1 - 16
-	///	    pitch           0 - 127
+	///     pitch           0 - 127
 	///     velocity        0 - 127
 	///     control value   0 - 127
 	///     program value   0 - 127
@@ -136,12 +135,12 @@ public:
 	///
 	/// note:
 	///     - a noteon with vel = 0 is equivalent to a noteoff
-	///	    - send velocity = 64 if not using velocity values
-	///	    - most synths don't use the velocity value in a noteoff
-	///	    - the lsb & msb for raw pitch bend bytes are 7 bit
+	///     - send velocity = 64 if not using velocity values
+	///     - most synths don't use the velocity value in a noteoff
+	///     - the lsb & msb for raw pitch bend bytes are 7 bit
 	///
 	/// references:
-	///	    http://www.srm.com/qtma/davidsmidispec.html
+	///     http://www.srm.com/qtma/davidsmidispec.html
 	///
 	void sendNoteOn(int channel, int pitch, int velocity=64);
 	void sendNoteOff(int channel, int pitch, int velocity=64);
@@ -152,21 +151,19 @@ public:
 	void sendAftertouch(int channel, int value);
 	void sendPolyAftertouch(int channel, int pitch, int value);
 	
-	///
-	/// raw midi bytes
+	/// raw MIDI bytes
 	///
 	void sendMidiByte(unsigned char byte);
-	void sendMidiBytes(vector<unsigned char>& bytes);
+	void sendMidiBytes(std::vector<unsigned char>& bytes);
 	
 /// \section Sending Stream Interface
 	
+	/// MIDI events
 	///
-	/// midi events
-	///
-	/// midiout << NoteOn(1, 64, 64) << NoteOff(1, 64);
-	/// midiout << ControlChange(1, 100, 64) << ProgramChange(1, 100);
-	/// midiout << << PitchBend(1, 2000);
-	/// midiout << Aftertouch(1, 127) << PolyAftertouch(1, 64, 127);
+	/// midiOut << NoteOn(1, 64, 64) << NoteOff(1, 64);
+	/// midiOut << ControlChange(1, 100, 64) << ProgramChange(1, 100);
+	/// midiOut << << PitchBend(1, 2000);
+	/// midiOut << Aftertouch(1, 127) << PolyAftertouch(1, 64, 127);
 	///
 	ofxMidiOut& operator<<(const NoteOn& var);
 	ofxMidiOut& operator<<(const NoteOff& var);
@@ -176,20 +173,22 @@ public:
 	ofxMidiOut& operator<<(const Aftertouch& var);
 	ofxMidiOut& operator<<(const PolyAftertouch& var);
 	
-	/// compound raw midi byte stream
+	/// compound raw MIDI byte stream
 	///
-	/// midiout << StartMidi() << 0x90 << 0x3C << 0x40 << FinishMidi();
+	/// midiOut << StartMidi() << 0x90 << 0x3C << 0x40 << FinishMidi();
 	///
-	/// build a raw midi byte message and send it with FinishMidi()
+	/// build a raw MIDI byte message and send it with FinishMidi()
 	///
-	/// note: other midi messages (except raw miid bytes) cannot be sent while
+	/// note: other MIDI messages (except raw MIDI bytes) cannot be sent while
 	///       the stream is in progress
 	///
+	/// warning: this is not thread safe, use sendMidiBytes() in a shared context
+	//
 	ofxMidiOut& operator<<(const StartMidi& var);
 	ofxMidiOut& operator<<(const FinishMidi& var);
 	ofxMidiOut& operator<<(const unsigned char var);
 	
 private:
 	
-	ofPtr<ofxBaseMidiOut> midiOut;
+	std::shared_ptr<ofxBaseMidiOut> midiOut;
 };

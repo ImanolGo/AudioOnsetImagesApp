@@ -12,6 +12,7 @@
 #include "AppManager.h"
 
 #include "GuiManager.h"
+#include "GuiTheme.h"
 
 
 const string GuiManager::GUI_SETTINGS_FILE_NAME = "xmls/GuiSettings.xml";
@@ -45,7 +46,7 @@ void GuiManager::setup()
     this->setupGuiPresets();
     this->setupImageGui();
     this->setupAudioGui();
-    this->loadTempPreset();
+    this->loadTempPreset(m_currentPreset);
 
     ofLogNotice() <<"GuiManager::initialized";
 
@@ -53,75 +54,48 @@ void GuiManager::setup()
 
 void GuiManager::setupGuiParameters()
 {
-    auto appManager = &AppManager::getInstance();
+    //create an actual ImGui context before setting up the addon
+    ImGui::CreateContext();
     
-    ofColor backgroundColor = AppManager::getInstance().getSettingsManager().getColor("GUI_Background");
-    ofColor fillColor = AppManager::getInstance().getSettingsManager().getColor("GUI_Fill");
-    m_gui.setDefaultBackgroundColor(backgroundColor);
-    m_gui.setDefaultFillColor(fillColor);
-    m_colors.push_back(AppManager::getInstance().getSettingsManager().getColor("GUI1"));
-    m_colors.push_back(AppManager::getInstance().getSettingsManager().getColor("GUI2"));
+    //specify a font to use
+    ImGuiIO& io = ImGui::GetIO();
+    io.Fonts->AddFontFromFileTTF(&ofToDataPath("fonts/roboto/Roboto-Regular.ttf")[0], 16.f);
     
-    m_gui.setDefaultHeaderBackgroundColor(m_colors[m_switchColor]);
-    m_gui.setDefaultFillColor(m_colors[m_switchColor]);
-    m_switchColor = 1 - m_switchColor;
+    //ImGui::GetIO().FontGlobalScale = 1.0 / 2.0;
     
-    m_gui.setDefaultWidth(GUI_WIDTH);
-    m_gui.setup(GUI_SETTINGS_NAME, GUI_SETTINGS_FILE_NAME);
-    m_gui.setPosition(MARGIN, MARGIN);
-    //m_gui.setPosition(20, 20);
-    m_gui.add(m_guiFPS.set("FPS", 0, 0, 60));
+    //finally setup the addon ofxImGui::Gui setup;
+    m_gui.setup(new GuiTheme());
+    ofxImGui::Settings().windowPos  = ofVec2f(0,0);
+    ofxImGui::Settings().windowSize = ofVec2f(GUI_WIDTH,ofGetHeight());
     
+    m_width = 0;
+    m_height = 0;
 
-    m_saveAllPresets.addListener(this, &GuiManager::saveAllPresets);
-    m_gui.add(m_saveAllPresets.setup("Save All Presets"));
     
-    m_saveCurrentPreset.addListener(this, &GuiManager::saveCurrentPreset);
-    m_gui.add(m_saveCurrentPreset.setup("Save Current Preset"));
+    auto appManager = &AppManager::getInstance();
     
     m_stop.set("Stop", false);
     m_stop.addListener(appManager, &AppManager::onChangeStop);
-    m_gui.add(m_stop);
+    m_parameters.add(m_stop);
     
     m_pause.set("Pause", false);
     m_pause.addListener(appManager, &AppManager::onChangePause);
-    m_gui.add(m_pause);
+    m_parameters.add(m_pause);
     
     m_blackout.set("Blackout", false);
     m_blackout.addListener(appManager, &AppManager::onChangeBlackout);
-    m_gui.add(m_blackout);
+    m_parameters.add(m_blackout);
     
-    
-    
-    ofxGuiSetFont( "fonts/open-sans/OpenSans-Semibold.ttf", 11 );
+
 }
 
 void GuiManager::setupGuiPresets()
 {
-    ofColor backgroundColor = AppManager::getInstance().getSettingsManager().getColor("GUI_Background");
-    ofColor fillColor = AppManager::getInstance().getSettingsManager().getColor("GUI_Fill");
-    m_guiPresets.setDefaultBackgroundColor(backgroundColor);
-    m_guiPresets.setDefaultFillColor(fillColor);
-    m_guiPresets.setDefaultHeaderBackgroundColor(m_colors[m_switchColor]);
-    m_guiPresets.setDefaultFillColor(m_colors[m_switchColor]);
-    
-    
-    auto windowSettings = WindowSettingsManager::getInstance().getWindowsSettings();
-    
-    m_guiPresets.setDefaultWidth(GUI_WIDTH);
-    m_guiPresets.setup("GuiPresets", "xmls/GuiPresets.xml");
-    m_guiPresets.setPosition(windowSettings[0].width - GUI_WIDTH - MARGIN, MARGIN);
-    
-    //m_guiPresets.setPosition(200, 20);
-    
     this->setupPresets();
 }
 
 void GuiManager::setupImageGui()
 {
-    m_gui.setDefaultHeaderBackgroundColor(m_colors[m_switchColor]);
-    m_gui.setDefaultFillColor(m_colors[m_switchColor]);
-    m_switchColor = 1 - m_switchColor;
     
     auto imageManager = &AppManager::getInstance().getImageManager();
 
@@ -130,54 +104,47 @@ void GuiManager::setupImageGui()
     m_brightness.set("Brightness", 255, 0, 255);
     m_brightness.addListener(imageManager, &ImageManager::onChangeBrightness);
     m_parametersImage.add(m_brightness);
+    m_parameters.add(m_brightness);
     
     m_crossFadeImgs.set("Crossfading", false);
     m_crossFadeImgs.addListener(imageManager, &ImageManager::onChangeCrossFade);
     m_parametersImage.add(m_crossFadeImgs);
+    m_parameters.add(m_crossFadeImgs);
     
     m_fadeTime.set("Fade Time", 2.0, 0.1, 30.0);
     m_fadeTime.addListener(imageManager, &ImageManager::onChangeFadeTime);
     m_parametersImage.add(m_fadeTime);
+    m_parameters.add(m_fadeTime);
     
     m_fadeTimeMin.set("Fade Time Min", 0.1, 0.1, 30.0);
     m_fadeTimeMin.addListener(imageManager, &ImageManager::onChangeMinFadeTime);
     m_parametersImage.add(m_fadeTimeMin);
+    m_parameters.add(m_fadeTimeMin);
     
     m_fadeTimeMax.set("Fade Time Max", 5, 0.1, 30.0);
     m_fadeTimeMax.addListener(imageManager, &ImageManager::onChangeMaxFadeTime);
     m_parametersImage.add(m_fadeTimeMax);
+    m_parameters.add(m_fadeTimeMax);
     
     m_noFade.set("No fading", false);
     m_noFade.addListener(imageManager, &ImageManager::onChangeNoFade);
     m_parametersImage.add(m_noFade);
+    m_parameters.add(m_noFade);
     
     m_randomFadeTime.set("Random Fade Time", false);
     m_randomFadeTime.addListener(imageManager, &ImageManager::onChangeRandomFade);
     m_parametersImage.add(m_randomFadeTime);
+    m_parameters.add(m_randomFadeTime);
     
     m_randomImages.set("Random Images", false);
     m_randomImages.addListener(imageManager, &ImageManager::onChangeRandomImages);
     m_parametersImage.add(m_randomImages);
-
-    m_gui.add(m_parametersImage);
-    
-    ofxButton * button = new ofxButton();
-    button->setup("Next Image");
-    button->addListener(imageManager, &ImageManager::nextImage);
-    m_gui.add(button);
-    
-    button = new ofxButton();
-    button->setup("Previous Image");
-    button->addListener(imageManager, &ImageManager::previousImage);
-    m_gui.add(button);
+    m_parameters.add(m_randomImages);
 
 }
 
 void GuiManager::setupAudioGui()
 {
-    m_gui.setDefaultHeaderBackgroundColor(m_colors[m_switchColor]);
-    m_gui.setDefaultFillColor(m_colors[m_switchColor]);
-    m_switchColor = 1 - m_switchColor;
     
     auto audioManager = &AppManager::getInstance().getAudioManager();
 
@@ -187,91 +154,58 @@ void GuiManager::setupAudioGui()
     m_lowFreqCut.set("Low Freq Cut", 0, 0, 511);
     m_lowFreqCut.addListener(audioManager, &AudioManager::onChangeLowFreqCut);
     m_parametersAudio.add(m_lowFreqCut);
+    m_parameters.add(m_lowFreqCut);
     
     m_highFreqCut.set("High Freq Cut", 511, 0, 511);
     m_highFreqCut.addListener(audioManager, &AudioManager::onChangeHighFreqCut);
     m_parametersAudio.add(m_highFreqCut);
+    m_parameters.add(m_highFreqCut);
     
     m_threshold.set("Threshold", 0.1, 0.0, 1.0);
     m_threshold.addListener(audioManager, &AudioManager::onChangeThreshold);
     m_parametersAudio.add(m_threshold);
+    m_parameters.add(m_threshold);
     
     m_decayTime.set("Decay Time", 0.5, 0.01, 30.0);
     m_decayTime.addListener(audioManager, &AudioManager::onChangeDecayTime);
     m_parametersAudio.add(m_decayTime);
+    m_parameters.add(m_decayTime);
     
     auto midiManager = &AppManager::getInstance().getMidiManager();
     
     m_midiChannel.set("Midi Channel", 1, 0, 20);
     m_midiChannel.addListener(midiManager, &MidiManager::onChangeChannel);
     m_parametersAudio.add(m_midiChannel);
+    m_parameters.add(m_midiChannel);
     
-    
-    m_notes_params.push_back(ofParameter<bool>("C-1",false));
-    m_notes_params.push_back(ofParameter<bool>("G-1",false));
-    m_notes_params.push_back(ofParameter<bool>("C0",false));
-    m_notes_params.push_back(ofParameter<bool>("G0",false));
-    m_notes_params.push_back(ofParameter<bool>("C1",false));
-    m_notes_params.push_back(ofParameter<bool>("G1",false));
-    m_notes_params.push_back(ofParameter<bool>("C2",false));
-    m_notes_params.push_back(ofParameter<bool>("G2",false));
-    m_notes_params.push_back(ofParameter<bool>("C3",false));
-    m_notes_params.push_back(ofParameter<bool>("G3",false));
-    m_notes_params.push_back(ofParameter<bool>("C4",false));
-    m_notes_params.push_back(ofParameter<bool>("G4",false));
-    m_matrixNotes.setup("Notes",3);
-    for(unsigned int i = 0; i < m_notes_params.size(); i++) {
-        m_notes_params.at(i).addListener(this, &GuiManager::onNoteChange);
-        m_matrixNotes.add(new ofxMinimalToggle(m_notes_params.at(i)));
+    m_matrixNotes.setName("Notes");
+    std::vector<std::string> notes = {"C-1","G-1","C0","G0","C1","G1","C2","G2","C3","G3","C4","G4"};
+    for(auto note: notes)
+    {
+        m_notes_params.push_back(ofParameter<bool>(note,false));
+        m_matrixNotes.add(m_notes_params.back());
+        m_parameters.add(m_notes_params.back());
     }
-    //m_matrixNotes.setBorderColor(ofColor::aquamarine);
-    m_matrixNotes.setElementHeight(26);
-    //m_matrixNotes.allowMultipleActiveToggles(false);
-    
-
-    m_gui.add(m_parametersAudio);
-    m_gui.add(&m_matrixNotes);
 }
 
 void GuiManager::setupPresets()
 {
     this->deleteTempPresets();
     
-    auto foldersVector = AppManager::getInstance().getImageManager().getFoldersNames();
+    m_presetNames = AppManager::getInstance().getImageManager().getFoldersNames();
     
-    for(auto folder: foldersVector)
-    {
-        m_presetParameters.push_back(ofParameter<bool>(folder,false));
-    }
+    m_matrixPresets.setName("Presets");
     
-    m_matrixPresets.setup("Presets",1);
-    for(unsigned int i = 0; i < m_presetParameters.size(); i++) {
-        m_presetParameters.at(i).addListener(this, &GuiManager::onPresetChange);
-        m_matrixPresets.add(new ofxMinimalToggle(m_presetParameters.at(i)));
-    }
-    //m_matrixNotes.setBorderColor(ofColor::aquamarine);
-   // m_matrixNotes.setElementHeight(26);
-    m_matrixPresets.allowMultipleActiveToggles(false);
-    
-    m_guiPresets.add(&m_matrixPresets);
+    m_lastPreset = 0;
+    m_currentPreset.set("Preset", m_lastPreset);
+    m_currentPreset.addListener(this, &GuiManager::onPresetChange);
+    m_matrixPresets.add(m_currentPreset);
+
 }
 
 void GuiManager::update()
 {
-    this->updatePresets();
-}
-
-void GuiManager::updatePresets()
-{
-    if(m_currentPreset != m_matrixPresets.getActiveToggleIndex()){
-        this->saveTempPreset();
-        m_currentPreset = m_matrixPresets.getActiveToggleIndex();
-        ofLogNotice() <<"GuiManager::updatePresetGroup -> Current Preset: " << m_currentPreset;
-        this->loadTempPreset();
-        AppManager::getInstance().getImageManager().setImageGroup(m_currentPreset);
-        m_matrixPresets.setActiveToggle(m_currentPreset);
-        
-    }
+    //Left empty
 }
 
 void GuiManager::draw()
@@ -280,40 +214,145 @@ void GuiManager::draw()
         return;
 
     this->drawRectangle();
+    this->drawGui();
 
-    m_guiFPS = ofGetFrameRate();
-    m_gui.draw();
-    m_guiPresets.draw();
 }
 
-
-void GuiManager::saveTempPreset()
+void GuiManager::drawGui()
 {
-    //m_gui.saveToFile(GUI_SETTINGS_FILE_NAME);
+    ofEnableAlphaBlending();
+    
+    m_gui.begin();
+        
+    auto mainSettings  = ofxImGui::Settings();
+
+    
+    if (ofxImGui::BeginWindow(GUI_SETTINGS_NAME, mainSettings, false))
+    {
+        ImGui::Text("%.1f FPS (%.3f ms/frame)", ofGetFrameRate(), 1000.0f / ImGui::GetIO().Framerate);
+                
+        if (ImGui::Button("Save All Presets"))
+        {
+            this->saveAllPresets();
+        }
+        
+        if (ImGui::Button("Save Current Preset"))
+        {
+            this->saveCurrentPreset();
+        }
+                          
+        if (ofxImGui::BeginTree(m_parameters, mainSettings))
+         {
+             ofxImGui::AddParameter(m_stop);
+             ofxImGui::AddParameter(m_pause);
+             ofxImGui::AddParameter(m_blackout);
+             ofxImGui::EndTree(mainSettings);
+        }
+        
+        if (ofxImGui::BeginTree(m_parametersImage, mainSettings))
+         {
+             ofxImGui::AddParameter(m_brightness);
+             ofxImGui::AddParameter(m_crossFadeImgs);
+             ofxImGui::AddParameter(m_fadeTime);
+             ofxImGui::AddParameter(m_fadeTimeMin);
+             ofxImGui::AddParameter(m_fadeTimeMax);
+             ofxImGui::AddParameter(m_noFade);
+             ofxImGui::AddParameter(m_randomFadeTime);
+             ofxImGui::AddParameter(m_randomImages);
+             
+             
+             if (ImGui::Button("Next Image"))
+             {
+                 AppManager::getInstance().getImageManager().nextImage();
+             }
+             
+             if (ImGui::Button("Previous Image"))
+             {
+                 AppManager::getInstance().getImageManager().previousImage();
+             }
+             
+             ofxImGui::EndTree(mainSettings);
+
+        }
+        
+        if (ofxImGui::BeginTree(m_parametersAudio, mainSettings))
+         {
+             ofxImGui::AddParameter(m_lowFreqCut);
+             ofxImGui::AddParameter(m_highFreqCut);
+             ofxImGui::AddParameter(m_threshold);
+             ofxImGui::AddParameter(m_decayTime);
+             ofxImGui::AddParameter(m_midiChannel);
+             ofxImGui::EndTree(mainSettings);
+        }
+        
+        if (ofxImGui::BeginTree(m_matrixNotes, mainSettings))
+         {
+             for(unsigned int i = 0; i < m_notes_params.size(); i++) {
+                 ofxImGui::AddParameter(m_notes_params.at(i));
+        
+             }
+             
+             ofxImGui::EndTree(mainSettings);
+        }
+        
+        if (ofxImGui::BeginTree(m_matrixPresets, mainSettings))
+         {
+             ofxImGui::AddCombo(m_currentPreset, m_presetNames);
+             
+             ofxImGui::EndTree(mainSettings);
+        }
+        
+        
+                
+    }
+    
+    
+    ofxImGui::EndWindow(mainSettings);
+    m_gui.end();
+    
+    //ofDisableAlphaBlending();
+        
+    this->updateSize(mainSettings);
+   
+}
+
+void GuiManager::updateSize(const ofxImGui::Settings& settings)
+{
+    if(m_width!= settings.windowSize.x){
+         m_width = settings.windowSize.x;
+    }
+   
+    m_height = settings.windowSize.y;
+    m_position = ofPoint(settings.windowPos.x, settings.windowPos.y);
+}
+void GuiManager::saveTempPreset(int index)
+{
     
     auto foldersVector = AppManager::getInstance().getImageManager().getFoldersNames();
-
-    if(m_currentPreset>=0){
-        string presetFileName = "xmls/GuiSettings_" + foldersVector[m_currentPreset] + "_temp.xml";
-        m_gui.saveToFile(presetFileName);
+    
+    if(index>=0 && index < foldersVector.size()){
+        
+        ofXml xml;
+        ofSerialize(xml, m_parameters);
+        
+        string presetFileName = "xmls/GuiSettings_" + foldersVector[index] + "_temp.xml";
+        xml.save(presetFileName);
     }
     
 }
 
-void GuiManager::loadTempPreset()
+void GuiManager::loadTempPreset(int index)
 {
-    //m_gui.loadFromFile(GUI_SETTINGS_FILE_NAME);
     
     auto foldersVector = AppManager::getInstance().getImageManager().getFoldersNames();
     
-    if(m_currentPreset>=0 && foldersVector.size()>m_currentPreset){
+    if(index>=0 && index < foldersVector.size()){
         //Try permanent preset
         string presetFileName = "xmls/GuiSettings_" + foldersVector[m_currentPreset] + ".xml";
-        m_gui.loadFromFile(presetFileName);
         
-        //Try temporal preset
-        string temporalPresetFileName  = "xmls/GuiSettings_" + foldersVector[m_currentPreset] + "_temp.xml";
-        m_gui.loadFromFile(temporalPresetFileName);
+        ofXml xml;
+        xml.load(presetFileName);
+        ofDeserialize(xml, m_parameters);
     }
 }
 
@@ -333,7 +372,7 @@ void GuiManager::deleteTempPresets()
 
 void GuiManager::saveAllPresets()
 {
-    this->saveTempPreset();
+    this->saveTempPreset(m_currentPreset);
 
     auto foldersVector = AppManager::getInstance().getImageManager().getFoldersNames();
     
@@ -348,7 +387,7 @@ void GuiManager::saveAllPresets()
 
 void GuiManager::saveCurrentPreset()
 {
-    this->saveTempPreset();
+    this->saveTempPreset(m_currentPreset);
     
     auto foldersVector = AppManager::getInstance().getImageManager().getFoldersNames();
     
@@ -373,10 +412,7 @@ void GuiManager::toggleGui()
     m_showGui = !m_showGui;
 }
 
-int  GuiManager::getCurrentNoteIndex() 
-{
-    return m_matrixNotes.getActiveToggleIndex();
-}
+
 
 vector<int>  GuiManager::getNoteIndexes()
 {
@@ -397,34 +433,18 @@ vector<int>  GuiManager::getNoteIndexes()
 void GuiManager::drawRectangle()
 {
     ofPushStyle();
-    ofSetColor(ofColor::black);
-    ofDrawRectangle( m_gui.getPosition().x - 20, 0, GUI_WIDTH + 60, ofGetHeight());
+    ofSetColor(15);
+    ofDrawRectangle( 0, 0, this->getWidth(), ofGetHeight());
     ofPopStyle();
 }
 
-void GuiManager::onNoteChange(bool& value)
+void GuiManager::onPresetChange(int& value)
 {
-    for(unsigned int i = 0; i < m_notes_params.size(); i++) {
-        if( value && (m_notes_params.at(i).get() == true)){
-            int index = m_matrixNotes.getActiveToggleIndex();
-            ofLogNotice() <<"GuiManager::onNoteChange -> Note: " << i << ", index = " << index;
-            
-            //ofLogNotice() <<"GuiManager::onNoteChange -> Note: " << i << ", value = " << value;
-        }
-    }
-}
-
-void GuiManager::onPresetChange(bool& value)
-{
-    for(unsigned int i = 0; i < m_presetParameters.size(); i++) {
-        if( value && (m_presetParameters.at(i).get() == true)){
-            int index = m_matrixPresets.getActiveToggleIndex();
-            ofLogNotice() <<"GuiManager::onPresetChange -> Preset: " << i << ", index = " << index;
-            //AppManager::getInstance().getImageManager().setImageGroup(i);
-            
-            //ofLogNotice() <<"GuiManager::onNoteChange -> Note: " << i << ", value = " << value;
-        }
-    }
+    this->saveTempPreset(m_lastPreset);
+    ofLogNotice() <<"GuiManager::updatePresetGroup -> Current Preset: " << value;
+    this->loadTempPreset(value);
+    AppManager::getInstance().getImageManager().setImageGroup(value);
+    m_lastPreset = value;
 }
 
 void GuiManager::setNote(const ofVec2f& value)
@@ -442,12 +462,11 @@ void GuiManager::setNote(const ofVec2f& value)
 
  void GuiManager::setPreset(int value)
 {
-    if(value < 0 || value >= m_presetParameters.size()){
+    if(value < 0 || value >= m_presetNames.size()){
         return;
     }
     
-    m_matrixPresets.setActiveToggle(value);
-
+    m_currentPreset.set(value);
 }
 
 

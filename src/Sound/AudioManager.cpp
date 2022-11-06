@@ -172,8 +172,11 @@ void AudioManager::drawFFTFilter()
 
 void AudioManager::setAnimations()
 {
+
+    EffectSettings settings;
+    settings.animationTime =m_decayTime;
     AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_animationVisual);
-    AppManager::getInstance().getVisualEffectsManager().createValueEffect(m_animationVisual, m_maxThreshold, m_minimumThreshold, 0.0, m_decayTime);
+    AppManager::getInstance().getVisualEffectsManager().createValueEffect(m_animationVisual, m_maxThreshold, m_minimumThreshold, settings);
 }
 
 void AudioManager::sendAllNotesOff()

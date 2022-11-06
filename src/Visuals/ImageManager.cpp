@@ -51,8 +51,8 @@ void ImageManager::setupRectangle()
 {
     WindowSettingsManager::WindowSettingsVector windowSettings = WindowSettingsManager::getInstance().getWindowsSettings();
     
-    float width = windowSettings[1].width;
-    float height = windowSettings[1].height;
+    float width = windowSettings[1].getWidth();
+    float height = windowSettings[1].getHeight();
   
     m_darknessRect =  ofPtr<RectangleVisual> (new RectangleVisual(ofPoint(0,0,0), width, height));
     m_darknessRect->setColor(ofColor::black);
@@ -69,7 +69,7 @@ void ImageManager::loadImages()
     
     ofLogNotice() <<"ImageManager::loading images ..." ;
     //some path, may be absolute or relative to bin/data
-    string path = "images/performance/";
+    string path = "performance/";
     ofDirectory dir(path);
     dir.listDir();
     
@@ -286,8 +286,8 @@ void ImageManager::loadImage(ofPtr<ImageVisual> image, int index)
 
     WindowSettingsManager::WindowSettingsVector windowSettings = WindowSettingsManager::getInstance().getWindowsSettings();
     
-    float width = windowSettings[1].width;
-    float height = windowSettings[1].height;
+    float width = windowSettings[1].getWidth();
+    float height = windowSettings[1].getHeight();
     
     
     image->setResource(m_currentImageNames[index]);
@@ -307,11 +307,11 @@ void ImageManager::loadImage(ofPtr<ImageVisual> image, int index)
 
 void ImageManager::setAnimations()
 {
-    
-    float fadeTime = this->getFadeTime();
     AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_currentImage);
     AppManager::getInstance().getVisualEffectsManager().removeAllVisualEffects(m_previousImage);
 
+    EffectSettings settings;
+    settings.animationTime =  this->getFadeTime();
     
     if(m_crossFadeImages){
         float currAlpha = m_currentImage->getAlpha();
@@ -319,14 +319,24 @@ void ImageManager::setAnimations()
         m_previousImage->setAlpha(currAlpha);
         m_currentImage->setAlpha(0.0);
         
-        AppManager::getInstance().getVisualEffectsManager().createFadeEffect(m_currentImage, 255.0, 0.0, fadeTime);
-        AppManager::getInstance().getVisualEffectsManager().createFadeEffect(m_previousImage, 0.0, 0.0, fadeTime);
+//        void createFadeEffect(ofPtr<BasicVisual> visual, double startAlpha,double endAlpha, EffectSettings& settings);
+//
+//        struct EffectSettings {
+//            EasingFunction function = LINEAR;
+//            EasingType type = EASE_IN;
+//            double startAnimation = 0.0;
+//            double animationTime = 0.0;
+//        };
+        
+        
+        AppManager::getInstance().getVisualEffectsManager().createFadeEffect(m_currentImage, 255.0, 0.0, settings);
+        AppManager::getInstance().getVisualEffectsManager().createFadeEffect(m_previousImage, 0.0, 0.0, settings);
         //m_currentImage->setAlpha(prevAlpha);
         //m_previousImage->setAlpha(currAlpha);
         
     }
     else{
-        AppManager::getInstance().getVisualEffectsManager().createFadeEffect(m_currentImage, 255.0, 0.0, 0.0, fadeTime);
+        AppManager::getInstance().getVisualEffectsManager().createFadeEffect(m_currentImage, 255.0, 0.0, settings);
         m_currentImage->setAlpha(255);
         m_previousImage->setAlpha(0);
     }
@@ -449,6 +459,8 @@ void ImageManager::pause(bool value)
 void ImageManager::blackout(bool value)
 {
     m_stop = value;
+    EffectSettings settings;
+    settings.animationTime =  1;
     
     ofLogNotice()<< "ImageManager::blackout-> Blackout: " << m_stop;
     
@@ -456,8 +468,8 @@ void ImageManager::blackout(bool value)
         AppManager::getInstance().getVisualEffectsManager().stopAllVisualEffects(m_currentImage);
         AppManager::getInstance().getVisualEffectsManager().stopAllVisualEffects(m_previousImage);
         
-        AppManager::getInstance().getVisualEffectsManager().createFadeEffect(m_currentImage, 0.0, 0.0, 1.0);
-        AppManager::getInstance().getVisualEffectsManager().createFadeEffect(m_previousImage, 0.0, 0.0, 1.0);
+        AppManager::getInstance().getVisualEffectsManager().createFadeEffect(m_currentImage, 0.0, 0.0, settings);
+        AppManager::getInstance().getVisualEffectsManager().createFadeEffect(m_previousImage, 0.0, 0.0, settings);
     }
 }
 

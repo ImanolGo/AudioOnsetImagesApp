@@ -57,8 +57,7 @@ void WindowSettingsManager::readSettings()
     {
         //WindowSettingsPtr settings = WindowSettingsPtr (new ofGLFWWindowSettings());
         ofGLFWWindowSettings settings;
-        settings.height = CGDisplayPixelsHigh ( displays[displayID] );
-        settings.width = CGDisplayPixelsWide ( displays[displayID] );
+        settings.setSize(CGDisplayPixelsWide ( displays[displayID] ), CGDisplayPixelsHigh ( displays[displayID] ));
         if(displayID == 1){
             settings.decorated = false;
         }
@@ -84,7 +83,7 @@ void WindowSettingsManager::readSettings()
     for (auto windowSettings: m_windows)
     {
         ofLogNotice() << "WindowSettingsManager::readSettings -> Window " <<  i << ": x = " << windowSettings.getPosition().x
-        << ", y = " << windowSettings.getPosition().y << ", width = " << windowSettings.width << ", height = " << windowSettings.height;
+        << ", y = " << windowSettings.getPosition().y << ", width = " << windowSettings.getWidth() << ", height = " << windowSettings.getHeight();
         i++;
     }
     
