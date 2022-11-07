@@ -72,6 +72,7 @@ void ImageManager::loadImages()
     string path = "performance/";
     ofDirectory dir(path);
     dir.listDir();
+    dir.sort();
     
     ofLogNotice() <<"ImageManager::directory size: " << dir.size() ;
     
@@ -106,7 +107,7 @@ bool ImageManager::loadSubfolder(ofDirectory& dir, int index)
         return false;
     }
     
-        
+    dir.sort();
     ofLogNotice()<< "ImageManager::loadSubfolder-> Path: " << dir.getAbsolutePath();
     ofLogNotice()<< "ImageManager::loadSubfolder-> Size: " << dir.size();
     

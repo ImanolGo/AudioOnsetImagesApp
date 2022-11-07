@@ -13,6 +13,7 @@ int main( ){
     
     windowSettings[1].shareContextWith = mainWindow;
     shared_ptr<ofAppBaseWindow> secondWindow = ofCreateWindow(windowSettings[1]);
+    secondWindow->setFullscreen(true);
 
     //secondWindow->setVerticalSync(false);
     
